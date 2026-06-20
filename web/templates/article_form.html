@@ -1,0 +1,52 @@
+{{define "article_form.html"}}
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>{{.Title}} - Blog Engine</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="sidebar">
+        <div class="logo"><h2>Blog Engine</h2></div>
+        <nav>
+            <a href="/" class="nav-item"><span class="icon">📊</span> 仪表盘</a>
+            <a href="/articles" class="nav-item"><span class="icon">📝</span> 文章管理</a>
+            <a href="/articles/new" class="nav-item active"><span class="icon">➕</span> 新建文章</a>
+            <a href="/publish" class="nav-item"><span class="icon">🚀</span> 发布</a>
+            <a href="/settings" class="nav-item"><span class="icon">⚙️</span> 设置</a>
+        </nav>
+    </div>
+    <main class="content">
+        <header><h1>{{.Title}}</h1></header>
+        <div class="main-content">
+            <form method="POST">
+                <a href="/articles" class="btn btn-secondary">← 返回</a>
+                <button type="submit" class="btn btn-primary">保存</button>
+                <br><br>
+                <div class="form-group">
+                    <label>标题</label>
+                    {{if .Article}}
+                    <input type="text" name="title" value="{{.Article.Title}}" readonly>
+                    {{else}}
+                    <input type="text" name="title" required placeholder="文章标题">
+                    {{end}}
+                </div>
+                <div class="form-group">
+                    <label>分类</label>
+                    <input type="text" name="category" value="{{if .Article}}{{.Article.Category}}{{end}}" placeholder="编程">
+                </div>
+                <div class="form-group">
+                    <label>标签（逗号分隔）</label>
+                    <input type="text" name="tags" value="{{if .Article}}{{range .Article.Tags}}{{.}}, {{end}}{{end}}" placeholder="golang, tutorial">
+                </div>
+                <div class="form-group">
+                    <label>内容（Markdown）</label>
+                    <textarea name="content" rows="20">{{if .Article}}{{.Article.Content}}{{end}}</textarea>
+                </div>
+            </form>
+        </div>
+    </main>
+</body>
+</html>
+{{end}}

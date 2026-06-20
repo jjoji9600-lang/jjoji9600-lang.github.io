@@ -1,0 +1,39 @@
+{{define "preview.html"}}
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>{{.Title}} - Blog Engine</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="sidebar">
+        <div class="logo"><h2>Blog Engine</h2></div>
+        <nav>
+            <a href="/" class="nav-item"><span class="icon">📊</span> 仪表盘</a>
+            <a href="/articles" class="nav-item"><span class="icon">📝</span> 文章管理</a>
+            <a href="/articles/new" class="nav-item"><span class="icon">➕</span> 新建文章</a>
+            <a href="/publish" class="nav-item"><span class="icon">🚀</span> 发布</a>
+            <a href="/settings" class="nav-item"><span class="icon">⚙️</span> 设置</a>
+        </nav>
+    </div>
+    <main class="content">
+        <header><h1>{{.Title}}</h1></header>
+        <div class="main-content">
+            <a href="/articles" class="btn btn-secondary">← 返回</a>
+            <a href="/articles/edit/{{.Article.Title}}" class="btn btn-primary">编辑</a>
+            <br><br>
+            <h2>{{.Article.Title}}</h2>
+            <div id="content"></div>
+        </div>
+    </main>
+    <script>
+    fetch('/api/preview/{{.Article.Title}}')
+        .then(r => r.json())
+        .then(data => {
+            if (data.success) document.getElementById('content').innerHTML = data.data;
+        });
+    </script>
+</body>
+</html>
+{{end}}

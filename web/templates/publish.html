@@ -1,0 +1,37 @@
+{{define "publish.html"}}
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>{{.Title}} - Blog Engine</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="sidebar">
+        <div class="logo"><h2>Blog Engine</h2></div>
+        <nav>
+            <a href="/" class="nav-item"><span class="icon">📊</span> 仪表盘</a>
+            <a href="/articles" class="nav-item"><span class="icon">📝</span> 文章管理</a>
+            <a href="/articles/new" class="nav-item"><span class="icon">➕</span> 新建文章</a>
+            <a href="/publish" class="nav-item active"><span class="icon">🚀</span> 发布</a>
+            <a href="/settings" class="nav-item"><span class="icon">⚙️</span> 设置</a>
+        </nav>
+    </div>
+    <main class="content">
+        <header><h1>{{.Title}}</h1></header>
+        <div class="main-content">
+            {{if .Message}}
+            <div class="alert alert-success">{{.Message}}</div>
+            {{end}}
+            <form method="POST">
+                <h3>选择发布平台</h3>
+                <label><input type="radio" name="platform" value="all" checked> 全部（GitHub + VPS）</label><br><br>
+                <label><input type="radio" name="platform" value="github"> GitHub Pages</label><br><br>
+                <label><input type="radio" name="platform" value="server"> VPS 服务器</label><br><br>
+                <button type="submit" class="btn btn-primary">🚀 发布</button>
+            </form>
+        </div>
+    </main>
+</body>
+</html>
+{{end}}

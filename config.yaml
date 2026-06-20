@@ -1,0 +1,21 @@
+# 博客配置
+title: "我的博客"
+description: "一个技术博客"
+link: "https://jjoji9600-lang.github.io"
+
+posts:
+  dir: "posts"
+
+github:
+  repo: "jjoji9600-lang/jjoji9600-lang.github.io"
+  branch: "main"
+
+server:
+  host: "localhost"
+  path: "/opt/blog/site"
+  port: 22
+  user: "root"
+
+image:
+  max_size: 10
+  dir: "assets"

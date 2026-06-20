@@ -1,0 +1,47 @@
+{{define "dashboard.html"}}
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{.Title}} - Blog Engine</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="sidebar">
+        <div class="logo"><h2>Blog Engine</h2></div>
+        <nav>
+            <a href="/" class="nav-item active"><span class="icon">📊</span> 仪表盘</a>
+            <a href="/articles" class="nav-item"><span class="icon">📝</span> 文章管理</a>
+            <a href="/articles/new" class="nav-item"><span class="icon">➕</span> 新建文章</a>
+            <a href="/publish" class="nav-item"><span class="icon">🚀</span> 发布</a>
+            <a href="/settings" class="nav-item"><span class="icon">⚙️</span> 设置</a>
+        </nav>
+    </div>
+    <main class="content">
+        <header><h1>{{.Title}}</h1></header>
+        <div class="main-content">
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-number">{{len .Articles}}</div>
+                    <div class="stat-label">文章总数</div>
+                </div>
+            </div>
+            <div class="recent-articles">
+                <h2>最近文章</h2>
+                {{range .Articles}}
+                <div class="article-item">
+                    <div class="article-info">
+                        <h3><a href="/preview/{{.Title}}">{{.Title}}</a></h3>
+                    </div>
+                    <div class="article-actions">
+                        <a href="/articles/edit/{{.Title}}" class="btn btn-small">编辑</a>
+                    </div>
+                </div>
+                {{end}}
+            </div>
+        </div>
+    </main>
+</body>
+</html>
+{{end}}
