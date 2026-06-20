@@ -9,6 +9,7 @@ posts:
 github:
   repo: "jjoji9600-lang/jjoji9600-lang.github.io"
   branch: "main"
+  proxy: "ghfast.top"
 
 server:
   host: "localhost"
