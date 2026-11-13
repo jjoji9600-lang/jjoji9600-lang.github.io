@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>如何快速入门 DeepSeek Harness 以从事相关工作</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; background: #f5f5f5; }
+        .container { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        h1 { color: #333; }
+        .back { display: inline-block; margin-bottom: 20px; color: #0066cc; text-decoration: none; }
+        .back:hover { text-decoration: underline; }
+        pre { background: #1e1e1e; color: #d4d4d4; padding: 15px; border-radius: 5px; overflow-x: auto; }
+        code { font-family: Consolas, monospace; }
+        p code { background: #f0f0f0; padding: 2px 6px; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a class="back" href="/">← 返回首页</a>
+        <h1>如何快速入门 DeepSeek Harness 以从事相关工作</h1>
+        <p>DeepSeek Harness（下称 DSH）是 DeepSeek 的 agent 运行时。它不是一个聊天窗口，而是把「模型 + 工具 + 沙箱 + 会话」拼起来的骨架：同一个内核，可以跑成浏览器界面、终端程序、一次性命令行任务，甚至给别的程序调用的服务。</p>
+<p>这篇按「能干活」为目标，写一条最短路径。文中命令都在 DSH <code>0.2.2-rc.1</code> 上跑过。</p>
+<h2>先分清它和普通 AI 工具的区别</h2>
+<p>普通对话工具给你一段文字，你自己去执行。DSH 拿到的是工具：读写文件、跑 shell、搜索网页、开子代理、设定时任务。所以它交付的不是建议，而是改动结果——包括改错的部分。</p>
+<p>这决定了入门重点不是「怎么提问」，而是三件事：<strong>给它正确的上下文、划清它能动的范围、验收它改了什么</strong>。</p>
+<h2>第 0 步：环境（5 分钟）</h2>
+<p>只需要 Node，版本要求 24.9 以上：</p>
+<pre><code>node -v                 # 必须 >= 24.9
+npm i -g @deepseek-ai/dsh
+dsh --version           # 0.2.2-rc.1
+</code></pre>
+<p>装完确认 <code>dsh</code> 在 <code>PATH</code> 里。如果 <code>command not found</code>，是 npm 全局 bin 目录没进 <code>PATH</code>，先解决这个，否则后面全是玄学错误。</p>
+<h2>第 1 步：跑起来，并且只让它干读的事（30 分钟）</h2>
+<pre><code>cd ~/your-project       # 重要：当前目录 = 它的 workspace 根
+dsh web                 # 起浏览器界面，会打印地址
+</code></pre>
+<p><code>dsh web</code> 会直接开浏览器；想自己控制就加 <code>--no-open</code>，端口冲突用 <code>--port 0</code> 让它随机挑。</p>
+<p>第一小时别急着让它改代码。让它做这些：</p>
+<li>读 README，告诉我这个项目干什么的</li>
+<li>列出目录结构，指出哪些是生成物</li>
+<li>解释这段报错可能的原因</li>
+<p>目的不是完成任务，而是建立对<strong>工具边界</strong>的直觉：它看得到什么、动得了什么、卡在哪里。这比背命令有用得多。</p>
+<p>入口不止 Web 一个，按场景选：</p>
+<p>| 入口 | 适用场景 |</p>
+<p>|---|---|</p>
+<p>| <code>dsh web</code> | 日常主力，需要看 diff、切会话 |</p>
+<p>| <code>dsh --profile tui</code> | 纯终端、SSH 环境 |</p>
+<p>| <code>dsh --profile headless "任务"</code> | 跑一次、打印结果、退出，适合脚本和 CI |</p>
+<p>| <code>dsh --profile acp</code> / <code>sdk</code> | 给其他程序当后端 |</p>
+<h2>第 2 步：理解 profile，这是分水岭（1 天）</h2>
+<p>大多数教程跳过这层，结果一遇到「为什么它没有某个功能」就卡死。</p>
+<p>DSH 的一切都是插件。一个 profile 就是一棵插件树：</p>
+<pre><code>~/.dsh/profiles/<name>/
+├── package.json        # dsh.profile.bundles：有序的插件包列表
+├── cordis.patch.yml    # 你自己的覆盖层
+└── node_modules/
+</code></pre>
+<p>安装包自带三百多个 <code>@deepseek-ai/dsh-*</code> 模块——模型接入、工具实现、Web UI、沙箱、会话存储，全在里面。<code>bundles</code> 决定装哪些，<code>cordis.patch.yml</code> 决定怎么改。</p>
+<p>三个命令够你摸清任何一台机器上的 DSH：</p>
+<pre><code>dsh --dump-config --profile web    # 合成后的完整插件树
+dsh plugin --profile web list      # 这个 profile 装了哪些插件
+dsh plugin --profile web add <pkg> # 加插件（转发给 pnpm）
+</code></pre>
+<p>看懂这棵树，你就能回答「这个能力是哪来的、怎么关掉、冲突了怎么办」。这是从「会用」到「能排查」的分界。</p>
+<h2>第 3 步：写第一个 skill（1 天）</h2>
+<p>凡是你重复做过三次以上的流程，都该固化成 skill。</p>
+<p>skill 就是带 frontmatter 的 markdown，放在 <code>~/.dsh/skills/<name>/SKILL.md</code>（项目级放 <code>.dsh/skills/</code>）：</p>
+<pre><code>---
+name: blog-publish
+description: 把文章发布到 GitHub Pages 博客。当用户说"发一篇博客""更新博客"时使用。
+---
+
+# 发布博客
+
+## 环境
+站点 https://example.github.io/ ，文章源 posts/*.md
+
+## 步骤
+1. 写文章
+2. 跑 scripts/publish.sh --dry-run 看待发布变更
+3. 跑 scripts/publish.sh 发布并验证
+</code></pre>
+<p>两个关键点：</p>
+<p><strong>description 决定它什么时候被自动选中</strong>。写「何时用」，不要写「是什么」。写成"一个发布博客的工具"永远不会触发；写成"当用户说'发一篇博客'时使用"就会。</p>
+<p><strong>别把知识全塞进 SKILL.md</strong>。正文只写步骤和约束，细节丢给同目录的脚本和参考文件，按需加载——否则每个 skill 都在吃你的上下文预算。</p>
+<p>一个可用的 skill 通常长这样：一份 80 行的 SKILL.md + 两个确定性脚本。脚本负责不会变的部分，模型负责判断。</p>
+<h2>第 4 步：把整条流程交出去（1 周）</h2>
+<p>单轮对话只是起点。真正省时间的是这四种编排：</p>
+<li><strong>子代理</strong>：把独立的调研、审查丢给独立上下文的子任务，主会话不被噪音污染</li>
+<li><strong>workflow</strong>：写一个脚本，对几十个文件并行 fan-out 给不同代理，适合批量审计、迁移</li>
+<li><strong>定时任务</strong>：按 cron 跑体检、生成日报，结果推到指定会话</li>
+<li><strong>headless + CI</strong>：<code>dsh --profile headless "跑测试并总结失败原因"</code> 直接进流水线</li>
+<p>判断标准很简单：这件事需要你<strong>盯着</strong>吗？不需要，就该编排化。</p>
+<h2>能拿去做什么</h2>
+<p>| 场景 | 用到的能力 |</p>
+<p>|---|---|</p>
+<p>| 服务器巡检、日志排查 | bash + 子代理并行 |</p>
+<p>| 内容发布（博客、文档站） | 文件读写 + 脚本 + 定时任务 |</p>
+<p>| 批量重构、依赖升级 | workflow fan-out + 测试验证 |</p>
+<p>| 把内部工具包成 AI 接口 | profile + 自定义插件 |</p>
+<p>| 自动化报告、周报 | headless + 定时任务 |</p>
+<p>共同点：<strong>有明确验收标准、能自动验证</strong>。这是 agent 最擅长的地形。</p>
+<h2>五个常见的坑</h2>
+<p>1. <strong>在 <code>/</code> 或家目录启动</strong>。workspace 根就是当前目录，起错地方等于把整个磁盘暴露给它。</p>
+<p>2. <strong>权限一步到位开最大</strong>。先用受限模式跑通，再按需放宽，别反过来。</p>
+<p>3. <strong>skill 的 description 写得像说明书</strong>。它是路由条件，不是简介。</p>
+<p>4. <strong>Node 版本不够</strong>。24.9 是硬门槛，低版本会在启动阶段炸。</p>
+<p>5. <strong>插件版本不匹配</strong>。安装时会校验 <code>engines.dsh</code> 范围，报错就照提示处理，别硬装。</p>
+<h2>两周计划</h2>
+<p><strong>第 1 周</strong>：装好、跑通 web、用只读任务建立直觉；把每天重复的一件事改造成 skill。</p>
+<p><strong>第 2 周</strong>：读 <code>--dump-config</code>，搞清插件树；写一个带脚本的 skill；把一条完整流程（发布、巡检、报表任选）交给定时任务或 headless。</p>
+<p>两周后你应该能做到：给一个新场景，判断它该做成 skill、子代理还是 workflow，并且知道出问题时去哪儿看。</p>
+<p>这比记住任何一条命令都值钱。</p>
+
+    </div>
+</body>
+</html>
