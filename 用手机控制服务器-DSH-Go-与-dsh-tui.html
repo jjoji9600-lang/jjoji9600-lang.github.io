@@ -3,120 +3,198 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>用手机控制服务器 DSH Go 与 dsh-tui</title>
+    <title>用手机控制服务器 DSH Go 与 dsh-tui - 我的博客</title>
+    <meta name="description" content="凌晨一点，手机弹出告警：磁盘 92%。笔记本在另一个房间，孩子刚睡着。你需要的不是一台电脑，而是一个能立刻动手的入口。">
+    <link rel="canonical" href="https://jjoji9600-lang.github.io/%E7%94%A8%E6%89%8B%E6%9C%BA%E6%8E%A7%E5%88%B6%E6%9C%8D%E5%8A%A1%E5%99%A8-DSH-Go-%E4%B8%8E-dsh-tui.html">
+    <meta property="og:url" content="https://jjoji9600-lang.github.io/%E7%94%A8%E6%89%8B%E6%9C%BA%E6%8E%A7%E5%88%B6%E6%9C%8D%E5%8A%A1%E5%99%A8-DSH-Go-%E4%B8%8E-dsh-tui.html">
+    <link rel="alternate" type="application/rss+xml" href="feed.xml" title="RSS">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="用手机控制服务器 DSH Go 与 dsh-tui">
+    <meta property="og:description" content="凌晨一点，手机弹出告警：磁盘 92%。笔记本在另一个房间，孩子刚睡着。你需要的不是一台电脑，而是一个能立刻动手的入口。">
     <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; background: #f5f5f5; }
-        .container { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        h1 { color: #333; }
-        .back { display: inline-block; margin-bottom: 20px; color: #0066cc; text-decoration: none; }
-        .back:hover { text-decoration: underline; }
-        pre { background: #1e1e1e; color: #d4d4d4; padding: 15px; border-radius: 5px; overflow-x: auto; }
-        code { font-family: Consolas, monospace; }
-        p code { background: #f0f0f0; padding: 2px 6px; border-radius: 4px; }
-    </style>
+    * { box-sizing: border-box; }
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
+            "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+        max-width: 820px; margin: 0 auto; padding: 20px;
+        background: #f5f5f5; color: #24292f; line-height: 1.75; font-size: 16px;
+        -webkit-font-smoothing: antialiased;
+    }
+    .container {
+        background: #fff; padding: 34px; border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0,0,0,.08);
+    }
+    h1, h2, h3, h4, h5, h6 { color: #1f2328; line-height: 1.3; }
+    h1 { font-size: 1.9em; margin: 0 0 .4em; }
+    h2 { font-size: 1.45em; margin: 1.8em 0 .7em; padding-bottom: .25em; border-bottom: 1px solid #eaeef2; }
+    h3 { font-size: 1.2em; margin: 1.5em 0 .6em; }
+    h4 { font-size: 1.05em; margin: 1.3em 0 .5em; }
+    p { margin: .9em 0; }
+    a { color: #0969da; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    img { max-width: 100%; height: auto; border-radius: 4px; }
+    ul, ol { padding-left: 1.7em; margin: .9em 0; }
+    li { margin: .3em 0; }
+    li > ul, li > ol { margin: .25em 0; }
+    blockquote {
+        margin: 1.1em 0; padding: .3em 1.1em; border-left: 4px solid #d0d7de;
+        color: #57606a; background: #f6f8fa; border-radius: 0 4px 4px 0;
+    }
+    blockquote p { margin: .4em 0; }
+    hr { border: none; border-top: 1px solid #eaeef2; margin: 2em 0; }
+    pre {
+        background: #1e1e1e; color: #d4d4d4; padding: 16px; border-radius: 6px;
+        overflow-x: auto; line-height: 1.55; font-size: .9em;
+    }
+    pre code { background: none; color: inherit; padding: 0; font-size: inherit; }
+    code { font-family: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace; font-size: .92em; }
+    p code, li code, td code, blockquote code {
+        background: #eff1f3; padding: 2px 6px; border-radius: 4px;
+    }
+    table { border-collapse: collapse; width: 100%; margin: 1.2em 0; font-size: .94em; display: block; overflow-x: auto; }
+    th, td { border: 1px solid #e1e4e8; padding: 7px 12px; text-align: left; }
+    th { background: #f6f8fa; font-weight: 600; }
+    tbody tr:nth-child(even) td { background: #fafbfc; }
+    .back { display: inline-block; margin-bottom: 18px; color: #0969da; font-size: .92em; }
+    .meta { color: #6e7781; font-size: .88em; margin: 0 0 2em; }
+    .meta .sep { margin: 0 8px; color: #d0d7de; }
+    .tag {
+        display: inline-block; padding: 1px 9px; background: #ddf4ff; color: #0969da;
+        border-radius: 12px; font-size: .82em; margin-right: 6px; white-space: nowrap;
+    }
+    .site-header { margin-bottom: 8px; }
+    .site-header h1 { margin-bottom: .2em; }
+    .site-header p { color: #6e7781; margin: 0 0 1.6em; }
+    .post { padding: 20px 0; border-bottom: 1px solid #eaeef2; }
+    .post:first-of-type { padding-top: 4px; }
+    .post:last-of-type { border-bottom: none; padding-bottom: 4px; }
+    .post h2 { margin: 0 0 6px; font-size: 1.28em; border: none; padding: 0; }
+    .post h2 a { color: #1f2328; }
+    .post h2 a:hover { color: #0969da; text-decoration: none; }
+    .post .meta { margin: 0 0 8px; }
+    .post .excerpt { margin: 0; color: #57606a; font-size: .95em; }
+    .empty { color: #6e7781; text-align: center; padding: 40px 0; }
+    footer {
+        margin-top: 2.5em; padding-top: 1.2em; border-top: 1px solid #eaeef2;
+        color: #8b949e; font-size: .85em;
+    }
+    footer a { color: #57606a; }
+    @media (max-width: 560px) {
+        body { padding: 10px; }
+        .container { padding: 20px; }
+        h1 { font-size: 1.55em; }
+    }
+</style>
 </head>
 <body>
     <div class="container">
-        <a class="back" href="/">← 返回首页</a>
+        <a class="back" href="index.html">&larr; 返回首页</a>
         <h1>用手机控制服务器 DSH Go 与 dsh-tui</h1>
-        <p>凌晨一点，手机弹出告警：磁盘 92%。笔记本在另一个房间，孩子刚睡着。你需要的不是一台电脑，而是一个能立刻动手的入口。</p>
+        <div class="meta"><time datetime="2026-11-13">2026-11-13</time><span class="sep">&middot;</span>技术<span class="sep">&middot;</span><span class="tag">dsh-go</span><span class="tag">dsh-tui</span><span class="tag">运维</span><span class="tag">安卓</span><span class="tag">远程</span></div>
+<p>凌晨一点，手机弹出告警：磁盘 92%。笔记本在另一个房间，孩子刚睡着。你需要的不是一台电脑，而是一个能立刻动手的入口。</p>
 <p>以前答案只有一个：手机 SSH 上去开终端。现在这套工具有了手机端——<strong>DSH Go</strong>，一个 Android App，直接连你服务器上的 DSH。手机聊天、审批、看结果；回到电脑，同一个会话还能用 <strong>dsh-tui</strong> 接着干。</p>
 <p>这篇把两条路都写清楚，以及各自适合什么。</p>
-<h2>先分清三个东西</h2>
-<li><strong>DSH Go</strong>：[ccch1mneyyy/dsh-go](https://github.com/ccch1mneyyy/dsh-go)，Android 客户端。可以在手机上装一套 Linux 环境本地跑，也可以只当遥控器，连电脑或服务器上的 DSH。</li>
-<li><strong>dsh-tui</strong>：[ccch1mneyyy/dsh-TUI](https://github.com/ccch1mneyyy/dsh-TUI)，同一作者的终端界面，跑在电脑或服务器的终端里。此外还有一个精简移植版 [dsh-tui/dsh-tui](https://github.com/dsh-tui/dsh-tui)（包名 <code>@dsh-tui/dsh-tui</code>），安装方式不同，下面会分开写。</li>
+<h2 id="先分清三个东西">先分清三个东西</h2>
+<ul>
+<li><strong>DSH Go</strong>：<a href="https://github.com/ccch1mneyyy/dsh-go" target="_blank" rel="noopener">ccch1mneyyy/dsh-go</a>，Android 客户端。可以在手机上装一套 Linux 环境本地跑，也可以只当遥控器，连电脑或服务器上的 DSH。</li>
+<li><strong>dsh-tui</strong>：<a href="https://github.com/ccch1mneyyy/dsh-TUI" target="_blank" rel="noopener">ccch1mneyyy/dsh-TUI</a>，同一作者的终端界面，跑在电脑或服务器的终端里。此外还有一个精简移植版 <a href="https://github.com/dsh-tui/dsh-tui" target="_blank" rel="noopener">dsh-tui/dsh-tui</a>（包名 <code>@dsh-tui/dsh-tui</code>），安装方式不同，下面会分开写。</li>
 <li><strong>DSH 本体</strong>：真正干活的内核。会话、模型渠道、工作区都存在它所在的那台主机上。</li>
+</ul>
 <p>关键一点：<strong>手机端不是把 AI 搬进手机，而是换个前端连同一台主机</strong>。所以手机上开的对话，主机上就有一份；换 dsh-tui 连同一个 <code>$DSH_HOME</code>，在 <code>/resume</code> 里能看到它。</p>
-<h2>方案一：DSH Go 直连服务器（日常首选）</h2>
+<h2 id="方案一dsh-go-直连服务器日常首选">方案一：DSH Go 直连服务器（日常首选）</h2>
 <p>链路很短：</p>
-<pre><code>DSH Go（手机） ──SSH 隧道──► 服务器上的 dsh web ──► DSH 引擎 ──► shell
-</code></pre>
+<pre><code class="language-text">DSH Go（手机） ──SSH 隧道──► 服务器上的 dsh web ──► DSH 引擎 ──► shell</code></pre>
 <p>端口不用对公网开放——App 建的是 SSH 隧道，连的是服务器回环地址上的 DSH。</p>
-<h3>1. 服务器先能跑 DSH</h3>
-<pre><code>node -v                        # 需要 24.9 以上
+<h3 id="1-服务器先能跑-dsh">1. 服务器先能跑 DSH</h3>
+<pre><code class="language-bash">node -v                        # 需要 24.9 以上
 npm i -g @deepseek-ai/dsh
-export DEEPSEEK_API_KEY=sk-... # 写进 ~/.bashrc
-</code></pre>
+export DEEPSEEK_API_KEY=sk-... # 写进 ~/.bashrc</code></pre>
 <p>手动起一次，确认能开：</p>
-<pre><code>dsh web
-</code></pre>
+<pre><code class="language-bash">dsh web</code></pre>
 <p>它会打印一个带端口和登录令牌的地址，<strong>记下这两样</strong>，后面「只连接」模式要用。</p>
 <p>注意：模型渠道和 Key 存在<strong>主机</strong>上。App 连远程主机时，模型页只显示那台主机配没配，不提供填写入口——这一步必须在服务器上做完。</p>
-<h3>2. 手机装 App</h3>
-<p>要求 Android 8.0 以上。从 [Releases](https://github.com/ccch1mneyyy/dsh-go/releases/latest) 或 [go.dshtui.com/download](https://go.dshtui.com/download) 下 APK，常见手机选 arm64。iOS 和鸿蒙还在适配。</p>
+<h3 id="2-手机装-app">2. 手机装 App</h3>
+<p>要求 Android 8.0 以上。从 <a href="https://github.com/ccch1mneyyy/dsh-go/releases/latest" target="_blank" rel="noopener">Releases</a> 或 <a href="https://go.dshtui.com/download" target="_blank" rel="noopener">go.dshtui.com/download</a> 下 APK，常见手机选 arm64。iOS 和鸿蒙还在适配。</p>
 <p>第一次打开会让你选 DSH 跑在哪：</p>
+<ul>
 <li><strong>本机</strong>：在手机上装约 1 GB 的 Linux 环境，不依赖服务器。适合没有服务器、或者想让它读手机屏幕的人。</li>
 <li><strong>远程主机</strong>：只当客户端，不占手机空间。<strong>控服务器选这个。</strong></li>
-<h3>3. 添加 SSH 主机</h3>
+</ul>
+<h3 id="3-添加-ssh-主机">3. 添加 SSH 主机</h3>
 <p><code>远程主机 → 添加 SSH 主机</code>，填三样：主机地址、用户名、端口（默认 22）。</p>
 <p>登录方式选密码或导入私钥，有口令就再填一次。然后是<strong>实例管理</strong>，这里有两条分支：</p>
+<ul>
 <li><strong>托管启动</strong>（默认）：启动命令填 <code>dsh web</code>，App 通过 SSH 在服务器上把它拉起来，并记住这个实例。测试连接会真的启动它，之后一直留着。用 nvm 装的 DSH 记得填完整路径。</li>
 <li><strong>只连接</strong>：你自己在服务器上跑 <code>dsh web</code>，把端口和令牌填进 App。App 只建 SSH 隧道，不启动、不重启、不碰进程。</li>
+</ul>
 <p>生产服务器建议用<strong>只连接</strong>：进程归 systemd 管，App 只负责连过去。</p>
 <p>工作目录（可选）填绝对路径，比如 <code>/srv/ops</code>，新对话就默认在这里开工。</p>
 <p>填完点<strong>测试连接</strong>。第一次会弹「信任这台主机？」，去服务器上核对指纹，一致再继续。保存，回到主机列表选中它。</p>
-<h3>4. 开始用</h3>
+<h3 id="4-开始用">4. 开始用</h3>
 <p>选主机 → 新对话 → 点模型胶囊选模型 → 说话。</p>
 <p>手机上真正省事的几个动作：</p>
+<ul>
 <li><strong>语音输入</strong>：输入框为空时，发送键变成麦克风。整句说完，文字填进输入框，检查一遍再发。</li>
 <li><strong>插话</strong>：AI 生成中直接发消息，选「插话」它下一步就看到；选「排队」等这一轮结束。排队的消息还能「立即发送」。</li>
 <li><strong>停止</strong>：输入框为空时，发送键变停止键，点一下停掉当前这轮。</li>
 <li><strong>审批</strong>：敏感工具调用会弹确认。「本对话都允许」只管当前对话，App 重启后恢复逐次询问。</li>
 <li><strong>附件</strong>：每条最多 9 个，相册、拍照、文件都行。</li>
 <li><strong>斜杠命令</strong>：<code>/compact</code> 压上下文，<code>/plan</code> 进计划模式，<code>/goal</code> 设长期目标，<code>/permission</code> 换权限预设，<code>/export</code> 导出整段对话。</li>
-<h2>方案二：SSH + dsh-tui（电脑端，或没有安卓机时）</h2>
+</ul>
+<h2 id="方案二ssh-dsh-tui电脑端或没有安卓机时">方案二：SSH + dsh-tui（电脑端，或没有安卓机时）</h2>
 <p>这条路的本质没变：终端就是前端。好处是任何能 SSH 的设备都能用，坏处是手机打字和窄屏。</p>
 <p>装 dsh-tui，两种发行线选一个：</p>
-<pre><code># 作者主仓库版：命令是 dst
+<pre><code class="language-bash"># 作者主仓库版：命令是 dst
 npm i -g @deepseek-ai/dsh @deepseek-harness-tui/dsh-tui
 
 # 精简移植版：命令是 dsh --profile tui
 dsh plugin --profile tui add @dsh-tui/dsh-tui
-dsh --profile tui
-</code></pre>
+dsh --profile tui</code></pre>
 <p>装完先体检：</p>
-<pre><code>dsh-tui doctor      # 主仓库版；移植版直接 dsh --profile tui 启动
-</code></pre>
+<pre><code class="language-bash">dsh-tui doctor      # 主仓库版；移植版直接 dsh --profile tui 启动</code></pre>
 <p>关键是 tmux。手机网络很脆，锁屏、切 Wi-Fi、进电梯都会断；断了不可怕，可怕的是 agent 正在改配置，连接一断进程跟着没。</p>
-<pre><code>tmux new -s ops     # 在里面启动 dsh-tui
+<pre><code class="language-bash">tmux new -s ops     # 在里面启动 dsh-tui
 # 脱离：Ctrl+b 然后按 d
 # 回来：tmux attach -t ops
-# 看有哪些：tmux ls
-</code></pre>
+# 看有哪些：tmux ls</code></pre>
 <p><code>~/.tmux.conf</code> 加两行，为通知服务：</p>
-<pre><code>set -g allow-passthrough on
-set -g focus-events on
-</code></pre>
+<pre><code class="language-tmux">set -g allow-passthrough on
+set -g focus-events on</code></pre>
 <p>断了重连回来，会话和上下文都还在。tmux 也没了（比如服务器重启），用 <code>dst --resume</code> 或进去之后 <code>/resume</code>，DSH 的会话是落盘的。</p>
-<h2>安全边界，这节别跳</h2>
+<h2 id="安全边界这节别跳">安全边界，这节别跳</h2>
+<ul>
 <li><strong>手机操控不等于远程控服务器</strong>。DSH Go 的「手机操控」（读屏、点按）只对本机引擎开放；连着远程主机时用不了。远程主机上它能做的是聊天、跑工具、审批。</li>
 <li><strong>权限分三档</strong>：逐次询问、自动审查、完全权限。生产环境别图省事开完全权限；<code>/permission</code> 可以临时切。</li>
 <li><strong>凭据各归各位</strong>：模型 Key 在主机上；SSH 密码、私钥、登录令牌只存在手机的安全存储里。</li>
 <li><strong>SSH 该加固就加固</strong>：密钥登录、禁 root、上 fail2ban。为了这个 App 单独把端口开到公网，是本末倒置——它本来就只需要 SSH。</li>
 <li><strong>首次连接核对指纹</strong>，别一路点「信任」。</li>
 <li><strong>后台保活</strong>：Android 会杀后台，去 <code>设置 › 后台运行</code> 关掉电池优化、保留通知、在最近任务里锁定 App。远程主机的提醒还要求 App 在线。</li>
-<h2>两条路怎么选</h2>
+</ul>
+<h2 id="两条路怎么选">两条路怎么选</h2>
+<ul>
 <li>掏手机就要处置：<strong>DSH Go</strong>。看状态、改一行配置、重启服务、查日志，最顺手。</li>
 <li>要读 diff、长时间重构、跑长命令：<strong>SSH + tmux + dsh-tui</strong>，或者干脆等回到电脑。</li>
 <li>服务器不在同一网络、没有公网 IP：<strong>DSH Remote</strong>（同一生态里的远程通道，端到端加密，需要在主机上装远程插件），或者确认 22 端口可达后用 SSH。</li>
-<h2>常见问题</h2>
+</ul>
+<h2 id="常见问题">常见问题</h2>
+<ul>
 <li><strong>连不上</strong>：远程主机页会按原因给修复按钮（重新连接、重新登录、重新信任）。先查端口、令牌和 SSH 本身。</li>
 <li><strong>发了没反应</strong>：看对话列表底部的主机状态；模型没配好时，选择模型里会提示填 Key 或加渠道。</li>
 <li><strong>App 能聊，<code>dsh --profile headless</code> 却报 <code>MISSING_CREDENTIAL</code></strong>：headless 不读 App 里保存的凭据，要在服务器的环境变量或 <code>.env</code> 里单独配 <code>DEEPSEEK_API_KEY</code>。</li>
 <li><strong>切后台回来引擎没了</strong>：按上面「后台保活」逐项放行，各品牌策略不同。</li>
 <li><strong>iOS / 鸿蒙</strong>：还没适配，作者在推进。</li>
-<h2>最小的可复刻清单</h2>
-<pre><code># 服务器
+</ul>
+<h2 id="最小的可复刻清单">最小的可复刻清单</h2>
+<pre><code class="language-bash"># 服务器
 npm i -g @deepseek-ai/dsh
 export DEEPSEEK_API_KEY=sk-...
-dsh web                      # 或用 App 的托管启动，让它替你起
-</code></pre>
+dsh web                      # 或用 App 的托管启动，让它替你起</code></pre>
 <p>手机：装 APK → 添加 SSH 主机 → 测试连接 → 核对指纹 → 新对话。</p>
 <p>电脑端备用：</p>
-<pre><code>npm i -g @deepseek-harness-tui/dsh-tui && dst
-</code></pre>
+<pre><code class="language-bash">npm i -g @deepseek-harness-tui/dsh-tui &amp;&amp; dst</code></pre>
 <p>一个内核，两个前端。手机负责「马上能动手」，终端负责「改得清楚」。行李越少，越能在需要的时候拿得出手。</p>
 
+        <footer>&copy; 2026 &middot; <a href="feed.xml">RSS</a></footer>
     </div>
 </body>
 </html>

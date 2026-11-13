@@ -3,3 +3,10 @@ blog-web
 web/
 config.yaml
 site/
+
+# Local publisher metadata and secrets
+.blog-manifest.json
+__pycache__/
+*.pyc
+.env
+blog.local.json

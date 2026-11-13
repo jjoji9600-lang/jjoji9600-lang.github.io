@@ -1,0 +1,20 @@
+{
+  "title": "我的博客",
+  "description": "一个技术博客",
+  "author": "",
+  "lang": "zh-CN",
+  "site_url": "https://jjoji9600-lang.github.io",
+  "repo": "jjoji9600-lang/jjoji9600-lang.github.io",
+  "branch": "main",
+  "posts_dir": "posts",
+  "output_dir": ".",
+  "mirror": false,
+  "mirror_dir": "_site",
+  "auth": "token",
+  "proxy": "",
+  "token": "",
+  "token_env": "GITHUB_TOKEN",
+  "feed": true,
+  "sitemap": true,
+  "tz_offset": 8
+}
