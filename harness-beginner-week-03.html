@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>小白版第3周：接上 DeepSeek API，第一次让模型回答 - 我的博客</title>
+    <meta name="description" content="从零开始，逐步操作：接上 DeepSeek API，第一次让模型回答。说明在哪里点、输入什么、看到什么和出错怎么办。">
+    <link rel="canonical" href="https://jjoji9600-lang.github.io/harness-beginner-week-03.html">
+    <meta property="og:url" content="https://jjoji9600-lang.github.io/harness-beginner-week-03.html">
+    <link rel="alternate" type="application/rss+xml" href="feed.xml" title="RSS">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="小白版第3周：接上 DeepSeek API，第一次让模型回答">
+    <meta property="og:description" content="从零开始，逐步操作：接上 DeepSeek API，第一次让模型回答。说明在哪里点、输入什么、看到什么和出错怎么办。">
+    <style>
+    * { box-sizing: border-box; }
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
+            "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+        max-width: 820px; margin: 0 auto; padding: 20px;
+        background: #f5f5f5; color: #24292f; line-height: 1.75; font-size: 16px;
+        -webkit-font-smoothing: antialiased;
+    }
+    .container {
+        background: #fff; padding: 34px; border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0,0,0,.08);
+    }
+    h1, h2, h3, h4, h5, h6 { color: #1f2328; line-height: 1.3; }
+    h1 { font-size: 1.9em; margin: 0 0 .4em; }
+    h2 { font-size: 1.45em; margin: 1.8em 0 .7em; padding-bottom: .25em; border-bottom: 1px solid #eaeef2; }
+    h3 { font-size: 1.2em; margin: 1.5em 0 .6em; }
+    h4 { font-size: 1.05em; margin: 1.3em 0 .5em; }
+    p { margin: .9em 0; }
+    a { color: #0969da; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    img { max-width: 100%; height: auto; border-radius: 4px; }
+    ul, ol { padding-left: 1.7em; margin: .9em 0; }
+    li { margin: .3em 0; }
+    li > ul, li > ol { margin: .25em 0; }
+    blockquote {
+        margin: 1.1em 0; padding: .3em 1.1em; border-left: 4px solid #d0d7de;
+        color: #57606a; background: #f6f8fa; border-radius: 0 4px 4px 0;
+    }
+    blockquote p { margin: .4em 0; }
+    hr { border: none; border-top: 1px solid #eaeef2; margin: 2em 0; }
+    pre {
+        background: #1e1e1e; color: #d4d4d4; padding: 16px; border-radius: 6px;
+        overflow-x: auto; line-height: 1.55; font-size: .9em;
+    }
+    pre code { background: none; color: inherit; padding: 0; font-size: inherit; }
+    code { font-family: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace; font-size: .92em; }
+    p code, li code, td code, blockquote code {
+        background: #eff1f3; padding: 2px 6px; border-radius: 4px;
+    }
+    table { border-collapse: collapse; width: 100%; margin: 1.2em 0; font-size: .94em; display: block; overflow-x: auto; }
+    th, td { border: 1px solid #e1e4e8; padding: 7px 12px; text-align: left; }
+    th { background: #f6f8fa; font-weight: 600; }
+    tbody tr:nth-child(even) td { background: #fafbfc; }
+    .back { display: inline-block; margin-bottom: 18px; color: #0969da; font-size: .92em; }
+    .meta { color: #6e7781; font-size: .88em; margin: 0 0 2em; }
+    .meta .sep { margin: 0 8px; color: #d0d7de; }
+    .tag {
+        display: inline-block; padding: 1px 9px; background: #ddf4ff; color: #0969da;
+        border-radius: 12px; font-size: .82em; margin-right: 6px; white-space: nowrap;
+    }
+    .site-header { margin-bottom: 8px; }
+    .site-header h1 { margin-bottom: .2em; }
+    .site-header p { color: #6e7781; margin: 0 0 1.6em; }
+    .post { padding: 20px 0; border-bottom: 1px solid #eaeef2; }
+    .post:first-of-type { padding-top: 4px; }
+    .post:last-of-type { border-bottom: none; padding-bottom: 4px; }
+    .post h2 { margin: 0 0 6px; font-size: 1.28em; border: none; padding: 0; }
+    .post h2 a { color: #1f2328; }
+    .post h2 a:hover { color: #0969da; text-decoration: none; }
+    .post .meta { margin: 0 0 8px; }
+    .post .excerpt { margin: 0; color: #57606a; font-size: .95em; }
+    .empty { color: #6e7781; text-align: center; padding: 40px 0; }
+    footer {
+        margin-top: 2.5em; padding-top: 1.2em; border-top: 1px solid #eaeef2;
+        color: #8b949e; font-size: .85em;
+    }
+    footer a { color: #57606a; }
+    @media (max-width: 560px) {
+        body { padding: 10px; }
+        .container { padding: 20px; }
+        h1 { font-size: 1.55em; }
+    }
+</style>
+</head>
+<body>
+    <div class="container">
+        <a class="back" href="index.html">&larr; 返回首页</a>
+        <h1>小白版第3周：接上 DeepSeek API，第一次让模型回答</h1>
+        <div class="meta"><time datetime="2026-11-14">2026-11-14</time><span class="sep">&middot;</span>小白十二周教程<span class="sep">&middot;</span><span class="tag">零基础</span><span class="tag">DeepSeek Harness</span><span class="tag">AI入门</span></div>
+<p><a href="harness-beginner.html">回到课程目录</a> · <a href="harness-beginner-week-02.html">上一课</a> · <a href="harness-beginner-week-04.html">下一课</a> · <a href="harness-beginner-help.html">卡住了看这里</a></p>
+<h2 id="这周只做一件事让-dsh-真正回答一句话">这周只做一件事：让 DSH 真正回答一句话</h2>
+<p>上周装好工作台，这周给它接上模型。<strong>API 可以先理解成软件调用模型的通道；API Key 是使用这个通道的秘密凭证。</strong> 它像一把会影响账户用量的钥匙，不是普通验证码，不能给别人。</p>
+<p>想先不付费？可以读完本周，继续做第5周的本地程序练习；但 DSH 的在线任务要等你完成真实接入后才能做，不能把阅读当接入成功。</p>
+<h2 id="第15天确认自己进入官方平台">第15天：确认自己进入官方平台</h2>
+<p>在浏览器输入 <a href="https://platform.deepseek.com/" target="_blank" rel="noopener">https://platform.deepseek.com/</a>，按官方流程注册或登录。不要通过陌生人的代开账号链接进入。</p>
+<p>平台可能让你验证邮箱或其他信息，按当期页面要求操作。遇验证码、地区或账号限制，不要购买共享账号绕过。</p>
+<p><strong>完成标志：</strong> 你知道自己登录的是 API 平台，不是只和 DeepSeek 聊天的普通页面。找不到时请助手解释官方页面用途，不让它代收你的登录信息。</p>
+<h2 id="第16天先看价格再决定是否继续">第16天：先看价格，再决定是否继续</h2>
+<p>打开<a href="https://api-docs.deepseek.com/quick_start/pricing" target="_blank" rel="noopener">官方模型与价格页</a>，再看账户余额／用量页面。你现在不用背价格表，只知道模型不同、输入输出长度不同，费用可能不同。</p>
+<p>Token 是模型计算文字长度的单位，和汉字数量不总是相等。不要把本课短问候的费用当成所有任务的费用保证。</p>
+<p>在 learn.txt 写一个自己的最高可接受支出。平台若提供提醒或限额可开启；没有就用小额预算、少量请求和人工检查。<strong>本课不要求某个充值金额，也不替你决定付款。</strong></p>
+<h2 id="第17天创建只供学习的-key">第17天：创建只供学习的 Key</h2>
+<p>在平台找到 API Keys 或 API 密钥入口，选择创建新密钥；如果能起名字，就叫 learning-dsh，方便以后识别。</p>
+<p>创建后可能只显示一次完整内容。按官方建议用可信密码管理器安全保存，或直接填入 DSH；不要存进 learn.txt、聊天、截图、邮箱草稿或公开网盘。不要为了让助手看懂，给它完整 Key。</p>
+<p><strong>完成标志：</strong> 你知道密钥在哪创建、该填在哪里，也知道泄露后要去平台撤销。没有完成安全保存就先停，不要到处复制。</p>
+<h2 id="第18天在-dsh-的模型设置里配置">第18天：在 DSH 的模型设置里配置</h2>
+<ol>
+<li>打开 DSH，找设置中的模型／提供方入口，英文可能是 Models 或 Providers。</li>
+<li>选择官方 DeepSeek 提供方，把自己的 Key 填到对应密钥框，不是聊天输入框。</li>
+<li>按当前界面保存，并选择账户可用的模型。模型名以当前平台和 DSH 实际可用项为准，不照抄旧教程名称。</li>
+</ol>
+<p>如果要求服务地址，<strong>只在官方 DeepSeek 接口场景</strong>对照<a href="https://api-docs.deepseek.com/" target="_blank" rel="noopener">官方首次调用说明</a>核对，通常是 https://api.deepseek.com。不要为了解决问题把 Key 填到陌生代理网站。</p>
+<p>各版本界面可能不同，可查<a href="https://github.com/deepseek-ai/deepseek-harness/blob/master/packages/llm/llm-deepseek/README.md" target="_blank" rel="noopener">DSH 官方模型适配器说明</a>。找不到对应入口就先求助，别在未知文件里乱改设置。</p>
+<h2 id="第19天只发一句最短的练习">第19天：只发一句最短的练习</h2>
+<p>在 DSH 新建一段对话，确认正在使用刚配置的 DeepSeek 模型，再发送：</p>
+<pre><code class="language-text">请只用一句中文向初学者问好。
+这一轮不要读文件、运行命令或调用任何工具。</code></pre>
+<p><strong>应该看到：</strong> 一句实际返回的问候。不是教程写的固定句子，文字不同很正常。发送一次后等待，不连续点击十次；失败也可能需要核对是否已有用量。</p>
+<h2 id="第20天认识三种常见失败">第20天：认识三种常见失败</h2>
+<ul>
+<li>提示 401 或鉴权失败：先检查 Key 是否有效、是否填对入口，不把 Key 发给人检查。</li>
+<li>提示余额、权限或模型错误：查看平台实际说明、余额与可用模型，不直接重装 DSH。</li>
+<li>一直转圈或网络超时：先停止，检查网络和官方状态。超时不一定意味着服务端没处理，别不停重试。</li>
+</ul>
+<p>把错误文字中不含秘密的部分记下来。如果今天已经成功，不需要故意浪费钱制造这些错误。</p>
+<h2 id="第21天复盘与完成标志">第21天：复盘与完成标志</h2>
+<p>正常退出后再打开 DSH，确认模型配置是否保留。愿意且预算允许才再做一次短请求，不要求为了打卡重复付费。</p>
+<p>在 learn.txt 写：实际模型名、第一次成功的日期、有没有查看用量、遇到的问题。不写 Key。</p>
+<p><strong>本周过关：</strong> 知道 API 和 Key 是什么；在 DSH 真正收到回复；知道花费在哪里查看；知道 Key 泄露要撤销并重新创建，而不是只删聊天。</p>
+<h2 id="给面试打一点基础">给面试打一点基础</h2>
+<p>练习用自己的话回答：DSH 界面能打开，为什么不代表模型已经接通？因为软件启动和模型服务鉴权、余额、网络是不同环节。现在能说清这一句就够了。</p>
+<hr>
+<p><a href="harness-beginner.html">回到课程目录</a> · <a href="harness-beginner-week-02.html">上一课</a> · <a href="harness-beginner-week-04.html">下一课</a> · <a href="harness-beginner-help.html">卡住了看这里</a></p>
+
+        <footer>&copy; 2026 &middot; <a href="feed.xml">RSS</a></footer>
+    </div>
+</body>
+</html>

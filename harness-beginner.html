@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>完全零基础也能跟：DeepSeek Harness 十二周小白教程 - 我的博客</title>
+    <meta name="description" content="不假设会 GitHub、终端或编程。从解压文件开始，一步步学 DeepSeek Harness + API，办公工具只协助理解。">
+    <link rel="canonical" href="https://jjoji9600-lang.github.io/harness-beginner.html">
+    <meta property="og:url" content="https://jjoji9600-lang.github.io/harness-beginner.html">
+    <link rel="alternate" type="application/rss+xml" href="feed.xml" title="RSS">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="完全零基础也能跟：DeepSeek Harness 十二周小白教程">
+    <meta property="og:description" content="不假设会 GitHub、终端或编程。从解压文件开始，一步步学 DeepSeek Harness + API，办公工具只协助理解。">
+    <style>
+    * { box-sizing: border-box; }
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
+            "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+        max-width: 820px; margin: 0 auto; padding: 20px;
+        background: #f5f5f5; color: #24292f; line-height: 1.75; font-size: 16px;
+        -webkit-font-smoothing: antialiased;
+    }
+    .container {
+        background: #fff; padding: 34px; border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0,0,0,.08);
+    }
+    h1, h2, h3, h4, h5, h6 { color: #1f2328; line-height: 1.3; }
+    h1 { font-size: 1.9em; margin: 0 0 .4em; }
+    h2 { font-size: 1.45em; margin: 1.8em 0 .7em; padding-bottom: .25em; border-bottom: 1px solid #eaeef2; }
+    h3 { font-size: 1.2em; margin: 1.5em 0 .6em; }
+    h4 { font-size: 1.05em; margin: 1.3em 0 .5em; }
+    p { margin: .9em 0; }
+    a { color: #0969da; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    img { max-width: 100%; height: auto; border-radius: 4px; }
+    ul, ol { padding-left: 1.7em; margin: .9em 0; }
+    li { margin: .3em 0; }
+    li > ul, li > ol { margin: .25em 0; }
+    blockquote {
+        margin: 1.1em 0; padding: .3em 1.1em; border-left: 4px solid #d0d7de;
+        color: #57606a; background: #f6f8fa; border-radius: 0 4px 4px 0;
+    }
+    blockquote p { margin: .4em 0; }
+    hr { border: none; border-top: 1px solid #eaeef2; margin: 2em 0; }
+    pre {
+        background: #1e1e1e; color: #d4d4d4; padding: 16px; border-radius: 6px;
+        overflow-x: auto; line-height: 1.55; font-size: .9em;
+    }
+    pre code { background: none; color: inherit; padding: 0; font-size: inherit; }
+    code { font-family: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace; font-size: .92em; }
+    p code, li code, td code, blockquote code {
+        background: #eff1f3; padding: 2px 6px; border-radius: 4px;
+    }
+    table { border-collapse: collapse; width: 100%; margin: 1.2em 0; font-size: .94em; display: block; overflow-x: auto; }
+    th, td { border: 1px solid #e1e4e8; padding: 7px 12px; text-align: left; }
+    th { background: #f6f8fa; font-weight: 600; }
+    tbody tr:nth-child(even) td { background: #fafbfc; }
+    .back { display: inline-block; margin-bottom: 18px; color: #0969da; font-size: .92em; }
+    .meta { color: #6e7781; font-size: .88em; margin: 0 0 2em; }
+    .meta .sep { margin: 0 8px; color: #d0d7de; }
+    .tag {
+        display: inline-block; padding: 1px 9px; background: #ddf4ff; color: #0969da;
+        border-radius: 12px; font-size: .82em; margin-right: 6px; white-space: nowrap;
+    }
+    .site-header { margin-bottom: 8px; }
+    .site-header h1 { margin-bottom: .2em; }
+    .site-header p { color: #6e7781; margin: 0 0 1.6em; }
+    .post { padding: 20px 0; border-bottom: 1px solid #eaeef2; }
+    .post:first-of-type { padding-top: 4px; }
+    .post:last-of-type { border-bottom: none; padding-bottom: 4px; }
+    .post h2 { margin: 0 0 6px; font-size: 1.28em; border: none; padding: 0; }
+    .post h2 a { color: #1f2328; }
+    .post h2 a:hover { color: #0969da; text-decoration: none; }
+    .post .meta { margin: 0 0 8px; }
+    .post .excerpt { margin: 0; color: #57606a; font-size: .95em; }
+    .empty { color: #6e7781; text-align: center; padding: 40px 0; }
+    footer {
+        margin-top: 2.5em; padding-top: 1.2em; border-top: 1px solid #eaeef2;
+        color: #8b949e; font-size: .85em;
+    }
+    footer a { color: #57606a; }
+    @media (max-width: 560px) {
+        body { padding: 10px; }
+        .container { padding: 20px; }
+        h1 { font-size: 1.55em; }
+    }
+</style>
+</head>
+<body>
+    <div class="container">
+        <a class="back" href="index.html">&larr; 返回首页</a>
+        <h1>完全零基础也能跟：DeepSeek Harness 十二周小白教程</h1>
+        <div class="meta"><time datetime="2026-11-14">2026-11-14</time><span class="sep">&middot;</span>小白十二周教程<span class="sep">&middot;</span><span class="tag">零基础</span><span class="tag">DeepSeek Harness</span><span class="tag">AI入门</span></div>
+<p>你不需要先会 GitHub，不需要会编程，也不用先理解一串英文缩写。如果你会开电脑、打开浏览器，我们就从这里开始。</p>
+<p>上一版更像已经懂一点技术的人用的学习清单。这一版换一种写法：<strong>告诉你在哪里操作、输入什么、看到什么算成功，卡住时怎么退回来。</strong> 原来的<a href="harness-12-weeks.html">工程版</a>仍然保留，现在不需要先读它。</p>
+<h2 id="先记住三句话">先记住三句话</h2>
+<ol>
+<li>WorkBuddy 或千问办公是你的辅导老师：看不懂时请它解释，不要求它替你做复杂项目。</li>
+<li><strong>DeepSeek Harness 是主要练习的软件，DeepSeek API 是它连接的模型服务。</strong> 后面我们简称 DSH，但第一次遇见英文不必背。</li>
+<li>GitHub 是后面才用来展示作品的网站，前九周不要求注册 GitHub，更不需要先学 Git 命令。</li>
+</ol>
+<p>可以粗略想成：DSH 是工作台，DeepSeek 模型是帮你想办法的助手，API 是连接到助手的通道。比喻只帮助入门；工作台还要管理工具、文件、权限和执行过程，后面会亲眼看到。</p>
+<h2 id="这门课怎么安排">这门课怎么安排？</h2>
+<p>每周安排七个小任务，每天约 30—60 分钟，安装和排错可能更久。一周做不完就用两周。不要因为教程写了十二周，就逼自己按日期追赶。</p>
+<p>主要演示 <strong>Windows 10／11</strong>。Mac 用户可以读相同的概念，但不能照抄 Windows 的安装包和菜单；安装与终端步骤请对照官方对应系统说明，必要时带上系统信息求助。本课不假装各系统界面完全一样。</p>
+<h2 id="开始前不要花冤枉钱">开始前，不要花冤枉钱</h2>
+<p>浏览教程、下载练习包、前期整理文件和后期使用 GitHub 基础功能，都不要求购买付费套餐。<strong>模型 API 通常另行计费</strong>，不能把办公软件会员、DeepSeek 聊天会员和 API 余额当作一回事。</p>
+<p>第3周才决定是否使用付费 API。先查官方当期价格与余额，定一个你能接受的上限，超出就停。不要为了跟课购买高价套餐或陌生人的代充服务。</p>
+<h2 id="我们会完成什么">我们会完成什么？</h2>
+<p>用五条虚构的求助记录做一个小练习：让 DSH 找到文件、读懂要求、调用小程序算数、写出一份周报，再检查有没有算错。随后认识 API、Skill、错误处理，最后把自己的学习成果展示到 GitHub。</p>
+<p>这不是要你十二周造出大型商业系统。我们先练会真实工作里最基本的闭环：<strong>说清要求 → 让工具执行 → 检查结果 → 出错能停下来。</strong></p>
+<p>参考答案只有四个数：共 <strong>5条</strong>，已完成 <strong>3条</strong>，待处理 <strong>2条</strong>，合计 <strong>60分钟</strong>。不需要商业知识，也没有真实客户资料。</p>
+<h2 id="下载学习材料">下载学习材料</h2>
+<p><a href="assets/harness-beginner/ai-start.zip">点击下载小白练习包</a></p>
+<p>不知道下载后在哪里、什么是压缩包？没有关系，<a href="harness-beginner-week-01.html">第1周</a>从找下载文件、解压和双击打开开始教。现在先不用运行任何程序。</p>
+<p>练习包里的代码是参考材料，不代表你已经写出了程序。课程会让你亲手改一点、验证一点；不要把别人的参考代码当独立开发经历。</p>
+<h2 id="按顺序开始">按顺序开始</h2>
+<table>
+<thead><tr>
+<th>周</th>
+<th>用日常语言说，这周学什么</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><a href="harness-beginner-week-01.html">第1周</a></td>
+<td>找文件、解压、打开、保存</td>
+</tr>
+<tr>
+<td><a href="harness-beginner-week-02.html">第2周</a></td>
+<td>安装 DSH，认界面和工作文件夹</td>
+</tr>
+<tr>
+<td><a href="harness-beginner-week-03.html">第3周</a></td>
+<td>创建 API Key，接通模型</td>
+</tr>
+<tr>
+<td><a href="harness-beginner-week-04.html">第4周</a></td>
+<td>让 DSH 读写文件，并检查它动了哪里</td>
+</tr>
+<tr>
+<td><a href="harness-beginner-week-05.html">第5周</a></td>
+<td>认识终端和 Python，运行第一个程序</td>
+</tr>
+<tr>
+<td><a href="harness-beginner-week-06.html">第6周</a></td>
+<td>看报错、做检查、不盲信 AI</td>
+</tr>
+<tr>
+<td><a href="harness-beginner-week-07.html">第7周</a></td>
+<td>把成功步骤保存下来，下次照着做</td>
+</tr>
+<tr>
+<td><a href="harness-beginner-week-08.html">第8周</a></td>
+<td>认识 Skill、会话、Profile</td>
+</tr>
+<tr>
+<td><a href="harness-beginner-week-09.html">第9周</a></td>
+<td>不靠 DSH，直接试一次 API</td>
+</tr>
+<tr>
+<td><a href="harness-beginner-week-10.html">第10周</a></td>
+<td>注册 GitHub，用网页上传文件</td>
+</tr>
+<tr>
+<td><a href="harness-beginner-week-11.html">第11周</a></td>
+<td>发布一个不含秘密的静态网页</td>
+</tr>
+<tr>
+<td><a href="harness-beginner-week-12.html">第12周</a></td>
+<td>讲清作品、练习面试、制定后续计划</td>
+</tr>
+</tbody>
+</table>
+<h2 id="不理解时怎么用办公助手">不理解时，怎么用办公助手？</h2>
+<p>WorkBuddy／千问办公二选一，能聊天就够了，不要求付费功能或本地文件权限。把下面这段发给它：</p>
+<pre><code class="language-text">我是完全零基础，正在学习 DeepSeek Harness。
+你只当辅导老师，不要一次给我完整技术方案。
+请先解释我当前遇到的一个词，再给一个操作。
+告诉我应该看到什么，等我回复后再继续。
+不清楚我的界面时先问我，不编造按钮。
+不要索要密码、API Key，也不要让我直接照抄危险命令。</code></pre>
+<p>如果它还是说得太难，补一句：请用教第一次用电脑的人的方式说，只告诉我下一步。</p>
+<h2 id="关于安全与真实结果">关于安全与真实结果</h2>
+<p>不要把密码或 API Key 发给任何聊天助手、同学、评论区；不上传到 GitHub。只在官方平台与软件对应的安全输入框里配置。不要让 DSH 看整个电脑、真实工作资料或私人文件。</p>
+<p>本课程配套程序的离线检查已实际运行；你的 DSH 版本、菜单、模型列表与费用可能不同。我们没有替你注册账号或支付 API 费用，<strong>不能把示例答案当自己的成功记录</strong>。</p>
+<p>十二周不是入职保证。先能自己完成一次，再逐渐补程序、测试、安全和真实业务经验；暂时不会代码并不妨碍开始。</p>
+<p><a href="harness-beginner-week-01.html">现在开始第1周</a> · <a href="harness-beginner-help.html">遇到问题的求助页</a></p>
+
+        <footer>&copy; 2026 &middot; <a href="feed.xml">RSS</a></footer>
+    </div>
+</body>
+</html>

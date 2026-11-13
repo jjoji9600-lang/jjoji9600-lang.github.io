@@ -5,6 +5,8 @@
 <!-- category: 十二周实战课 -->
 <!-- description: 办公工具只协助学习，以 DeepSeek Harness + DeepSeek API 为核心，含 84 天任务、练习包、安全、评测与面试。 -->
 
+> 第一次接触 GitHub、终端或编程？请先读[完全零基础小白版](harness-beginner.html)，本页保留为后续工程进阶参考。
+
 本课程的主角是 **DeepSeek Harness（DSH）+ DeepSeek API**。WorkBuddy 或千问办公只作学习助手：解释概念、辅助阅读、整理笔记，不承担核心项目，也不要求它处理复杂业务。
 
 适合会用电脑、尚未开发 AI 应用的人。建议每周 7—10 小时；零基础可以延长。目标是积累初级 AI 应用／Agent 岗位的作品与面试基础，不保证录用。Harness 工程师并非统一招聘名称。

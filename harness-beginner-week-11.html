@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>小白版第11周：把学习作品变成一个别人能打开的网页 - 我的博客</title>
+    <meta name="description" content="从零开始，逐步操作：把学习作品变成一个别人能打开的网页。说明在哪里点、输入什么、看到什么和出错怎么办。">
+    <link rel="canonical" href="https://jjoji9600-lang.github.io/harness-beginner-week-11.html">
+    <meta property="og:url" content="https://jjoji9600-lang.github.io/harness-beginner-week-11.html">
+    <link rel="alternate" type="application/rss+xml" href="feed.xml" title="RSS">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="小白版第11周：把学习作品变成一个别人能打开的网页">
+    <meta property="og:description" content="从零开始，逐步操作：把学习作品变成一个别人能打开的网页。说明在哪里点、输入什么、看到什么和出错怎么办。">
+    <style>
+    * { box-sizing: border-box; }
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
+            "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+        max-width: 820px; margin: 0 auto; padding: 20px;
+        background: #f5f5f5; color: #24292f; line-height: 1.75; font-size: 16px;
+        -webkit-font-smoothing: antialiased;
+    }
+    .container {
+        background: #fff; padding: 34px; border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0,0,0,.08);
+    }
+    h1, h2, h3, h4, h5, h6 { color: #1f2328; line-height: 1.3; }
+    h1 { font-size: 1.9em; margin: 0 0 .4em; }
+    h2 { font-size: 1.45em; margin: 1.8em 0 .7em; padding-bottom: .25em; border-bottom: 1px solid #eaeef2; }
+    h3 { font-size: 1.2em; margin: 1.5em 0 .6em; }
+    h4 { font-size: 1.05em; margin: 1.3em 0 .5em; }
+    p { margin: .9em 0; }
+    a { color: #0969da; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    img { max-width: 100%; height: auto; border-radius: 4px; }
+    ul, ol { padding-left: 1.7em; margin: .9em 0; }
+    li { margin: .3em 0; }
+    li > ul, li > ol { margin: .25em 0; }
+    blockquote {
+        margin: 1.1em 0; padding: .3em 1.1em; border-left: 4px solid #d0d7de;
+        color: #57606a; background: #f6f8fa; border-radius: 0 4px 4px 0;
+    }
+    blockquote p { margin: .4em 0; }
+    hr { border: none; border-top: 1px solid #eaeef2; margin: 2em 0; }
+    pre {
+        background: #1e1e1e; color: #d4d4d4; padding: 16px; border-radius: 6px;
+        overflow-x: auto; line-height: 1.55; font-size: .9em;
+    }
+    pre code { background: none; color: inherit; padding: 0; font-size: inherit; }
+    code { font-family: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace; font-size: .92em; }
+    p code, li code, td code, blockquote code {
+        background: #eff1f3; padding: 2px 6px; border-radius: 4px;
+    }
+    table { border-collapse: collapse; width: 100%; margin: 1.2em 0; font-size: .94em; display: block; overflow-x: auto; }
+    th, td { border: 1px solid #e1e4e8; padding: 7px 12px; text-align: left; }
+    th { background: #f6f8fa; font-weight: 600; }
+    tbody tr:nth-child(even) td { background: #fafbfc; }
+    .back { display: inline-block; margin-bottom: 18px; color: #0969da; font-size: .92em; }
+    .meta { color: #6e7781; font-size: .88em; margin: 0 0 2em; }
+    .meta .sep { margin: 0 8px; color: #d0d7de; }
+    .tag {
+        display: inline-block; padding: 1px 9px; background: #ddf4ff; color: #0969da;
+        border-radius: 12px; font-size: .82em; margin-right: 6px; white-space: nowrap;
+    }
+    .site-header { margin-bottom: 8px; }
+    .site-header h1 { margin-bottom: .2em; }
+    .site-header p { color: #6e7781; margin: 0 0 1.6em; }
+    .post { padding: 20px 0; border-bottom: 1px solid #eaeef2; }
+    .post:first-of-type { padding-top: 4px; }
+    .post:last-of-type { border-bottom: none; padding-bottom: 4px; }
+    .post h2 { margin: 0 0 6px; font-size: 1.28em; border: none; padding: 0; }
+    .post h2 a { color: #1f2328; }
+    .post h2 a:hover { color: #0969da; text-decoration: none; }
+    .post .meta { margin: 0 0 8px; }
+    .post .excerpt { margin: 0; color: #57606a; font-size: .95em; }
+    .empty { color: #6e7781; text-align: center; padding: 40px 0; }
+    footer {
+        margin-top: 2.5em; padding-top: 1.2em; border-top: 1px solid #eaeef2;
+        color: #8b949e; font-size: .85em;
+    }
+    footer a { color: #57606a; }
+    @media (max-width: 560px) {
+        body { padding: 10px; }
+        .container { padding: 20px; }
+        h1 { font-size: 1.55em; }
+    }
+</style>
+</head>
+<body>
+    <div class="container">
+        <a class="back" href="index.html">&larr; 返回首页</a>
+        <h1>小白版第11周：把学习作品变成一个别人能打开的网页</h1>
+        <div class="meta"><time datetime="2026-11-14">2026-11-14</time><span class="sep">&middot;</span>小白十二周教程<span class="sep">&middot;</span><span class="tag">零基础</span><span class="tag">DeepSeek Harness</span><span class="tag">AI入门</span></div>
+<p><a href="harness-beginner.html">回到课程目录</a> · <a href="harness-beginner-week-10.html">上一课</a> · <a href="harness-beginner-week-12.html">下一课</a> · <a href="harness-beginner-help.html">卡住了看这里</a></p>
+<h2 id="这周只做一件事让别人点开网页就能看懂你的练习">这周只做一件事：让别人点开网页就能看懂你的练习</h2>
+<p>上周的仓库像网上文件夹，这周做一个项目介绍网页。GitHub Pages 就是把仓库里的网页文件发布成网站的功能。</p>
+<p><strong>它不是运行 AI 的服务器。</strong> 网页只是介绍作品，不会运行 Python，不放 API Key，也不提供让所有人花你余额的模型按钮。</p>
+<h2 id="第71天先在自己电脑上看模板">第71天：先在自己电脑上看模板</h2>
+<p>打开练习目录，进入 site-example 文件夹，找到 index.html，双击。一般会在浏览器打开一个简单页面。</p>
+<p>.html 是网页文件。浏览器负责显示它，记事本可以编辑里面的文字。不需要先学完整前端开发。</p>
+<p>应该看到我的第一个 DeepSeek Harness 练习，以及几个待填写区域。这是模板，不是你的真实成果，先不要直接发布。</p>
+<h2 id="第72天让-dsh-帮忙只改介绍文字">第72天：让 DSH 帮忙，只改介绍文字</h2>
+<p>把你真实完成的三件事写在 learn.txt，注意不要含 Key。回到 DSH，确认工作目录，发送：</p>
+<pre><code class="language-text">请先读取 site-example/index.html，暂时不要修改。
+我想把介绍改成我的真实学习成果：这里填三件确实做过的事。
+未完成的 API／Skill 功能必须写未完成，不能替我编造数据。
+只改这个网页的文字，不加外部脚本、不联网、不加模型调用。
+先说准备改哪里，等我确认。</code></pre>
+<p>审核后批准改动。自己重新双击 index.html，或在浏览器按 Ctrl+R 刷新，核对内容。没有真实做过的能力直接删掉或写待完成。</p>
+<h2 id="第73天上传网页只选-indexhtml">第73天：上传网页，只选 index.html</h2>
+<p>打开 GitHub 的 my-ai-learning 仓库，回到最外层的文件列表，也就是能同时看到 README.md 和 report.py 的页面。</p>
+<p>选择 Add file → Upload files，进入本地 site-example，选里面的 index.html 上传。<strong>上传的是文件本身，不是整个 site-example 文件夹。</strong></p>
+<p>写一句添加项目介绍页，点 Commit changes。完成后，仓库最外层应直接看到 index.html。若变成 site-example/index.html，先停止，按当前页面的移动／上传操作求助，不要乱删其他文件。</p>
+<h2 id="第74天开启-pages">第74天：开启 Pages</h2>
+<p>在你自己的仓库页点 Settings，不是账号头像里的全局设置。在侧边栏找 Pages，常见在 Code and automation 分组下。</p>
+<p>在构建与发布区域，按当前 GitHub 页面选择：</p>
+<pre><code class="language-text">Source：Deploy from a branch（从分支发布）
+Branch：main（以你仓库真实默认分支名为准）
+Folder：/ (root)（仓库最外层）</code></pre>
+<p>点 Save。不要填自定义域名，也不需要绑定银行卡。若页面只有其他选项，先对照<a href="https://docs.github.com/en/pages/getting-started-with-github-pages/creating-a-github-pages-site" target="_blank" rel="noopener">GitHub 官方 Pages 帮助</a>，别随便开启付费计划。</p>
+<p>之所以选 root，是因为上一天把 index.html 放在最外层；路径和文件位置必须对应。</p>
+<h2 id="第75天等待然后用正确的网址访问">第75天：等待，然后用正确的网址访问</h2>
+<p>发布可能需要几分钟。等 Pages 页面提示已发布或给出网站地址，再点 Visit site 或复制该地址。</p>
+<p>常见格式像 https://你的用户名.github.io/my-ai-learning/，但以 GitHub 实际给出的地址为准。不要把带中文的示例网址原样当自己的网址。</p>
+<p><strong>完成标志：</strong> 打开的是你的介绍网页，不是 GitHub 文件列表，也不是 index.html 的源代码页。</p>
+<h2 id="第76天排查最常见的404">第76天：排查最常见的404</h2>
+<p>404 可以先理解为这个网址暂时没有找到页面。按顺序检查：</p>
+<ol>
+<li>仓库最外层有没有 index.html，注意不是 index.html.txt，也不是 Index.html。</li>
+<li>Pages 是否选对分支、是否选 root，而不是 docs。</li>
+<li>是否已经等待发布完成，网址有没有漏掉 my-ai-learning。</li>
+<li>页面显示发布失败时，先读失败信息或求助，不连续重新上传相同文件。</li>
+</ol>
+<p>如果网页还显示旧文字，先刷新或用无痕窗口看；后台未发布完成时不只是浏览器缓存问题。</p>
+<h2 id="第77天像陌生读者一样检查">第77天：像陌生读者一样检查</h2>
+<p>用无痕窗口打开网站，检查中文是否正常、内容有没有虚构、有没有账号信息或密钥、项目链接是否正确。再请朋友看一句：你能看懂我做了什么吗？</p>
+<p>把真实的网址写在 learn.txt。没有发布成功，就写未成功，不为了简历贴一个打不开的链接。</p>
+<p><strong>本周过关：</strong> 你有一份真实、无秘密、别人能打开的静态介绍页。它不需要漂亮，更不需要一个实际消耗 API 余额的在线演示。</p>
+<h2 id="学会一句话解释">学会一句话解释</h2>
+<p>GitHub 仓库保存项目文件；GitHub Pages 把其中的静态网页展示出来；运行 Python 和调用 API 是另外的事情。把这三个分清，你已经跨过了很多第一次用 GitHub 的困惑。</p>
+<hr>
+<p><a href="harness-beginner.html">回到课程目录</a> · <a href="harness-beginner-week-10.html">上一课</a> · <a href="harness-beginner-week-12.html">下一课</a> · <a href="harness-beginner-help.html">卡住了看这里</a></p>
+
+        <footer>&copy; 2026 &middot; <a href="feed.xml">RSS</a></footer>
+    </div>
+</body>
+</html>

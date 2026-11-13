@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>小白版第10周：第一次使用 GitHub，不需要先学 Git 命令 - 我的博客</title>
+    <meta name="description" content="从零开始，逐步操作：第一次使用 GitHub，不需要先学 Git 命令。说明在哪里点、输入什么、看到什么和出错怎么办。">
+    <link rel="canonical" href="https://jjoji9600-lang.github.io/harness-beginner-week-10.html">
+    <meta property="og:url" content="https://jjoji9600-lang.github.io/harness-beginner-week-10.html">
+    <link rel="alternate" type="application/rss+xml" href="feed.xml" title="RSS">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="小白版第10周：第一次使用 GitHub，不需要先学 Git 命令">
+    <meta property="og:description" content="从零开始，逐步操作：第一次使用 GitHub，不需要先学 Git 命令。说明在哪里点、输入什么、看到什么和出错怎么办。">
+    <style>
+    * { box-sizing: border-box; }
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
+            "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+        max-width: 820px; margin: 0 auto; padding: 20px;
+        background: #f5f5f5; color: #24292f; line-height: 1.75; font-size: 16px;
+        -webkit-font-smoothing: antialiased;
+    }
+    .container {
+        background: #fff; padding: 34px; border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0,0,0,.08);
+    }
+    h1, h2, h3, h4, h5, h6 { color: #1f2328; line-height: 1.3; }
+    h1 { font-size: 1.9em; margin: 0 0 .4em; }
+    h2 { font-size: 1.45em; margin: 1.8em 0 .7em; padding-bottom: .25em; border-bottom: 1px solid #eaeef2; }
+    h3 { font-size: 1.2em; margin: 1.5em 0 .6em; }
+    h4 { font-size: 1.05em; margin: 1.3em 0 .5em; }
+    p { margin: .9em 0; }
+    a { color: #0969da; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    img { max-width: 100%; height: auto; border-radius: 4px; }
+    ul, ol { padding-left: 1.7em; margin: .9em 0; }
+    li { margin: .3em 0; }
+    li > ul, li > ol { margin: .25em 0; }
+    blockquote {
+        margin: 1.1em 0; padding: .3em 1.1em; border-left: 4px solid #d0d7de;
+        color: #57606a; background: #f6f8fa; border-radius: 0 4px 4px 0;
+    }
+    blockquote p { margin: .4em 0; }
+    hr { border: none; border-top: 1px solid #eaeef2; margin: 2em 0; }
+    pre {
+        background: #1e1e1e; color: #d4d4d4; padding: 16px; border-radius: 6px;
+        overflow-x: auto; line-height: 1.55; font-size: .9em;
+    }
+    pre code { background: none; color: inherit; padding: 0; font-size: inherit; }
+    code { font-family: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace; font-size: .92em; }
+    p code, li code, td code, blockquote code {
+        background: #eff1f3; padding: 2px 6px; border-radius: 4px;
+    }
+    table { border-collapse: collapse; width: 100%; margin: 1.2em 0; font-size: .94em; display: block; overflow-x: auto; }
+    th, td { border: 1px solid #e1e4e8; padding: 7px 12px; text-align: left; }
+    th { background: #f6f8fa; font-weight: 600; }
+    tbody tr:nth-child(even) td { background: #fafbfc; }
+    .back { display: inline-block; margin-bottom: 18px; color: #0969da; font-size: .92em; }
+    .meta { color: #6e7781; font-size: .88em; margin: 0 0 2em; }
+    .meta .sep { margin: 0 8px; color: #d0d7de; }
+    .tag {
+        display: inline-block; padding: 1px 9px; background: #ddf4ff; color: #0969da;
+        border-radius: 12px; font-size: .82em; margin-right: 6px; white-space: nowrap;
+    }
+    .site-header { margin-bottom: 8px; }
+    .site-header h1 { margin-bottom: .2em; }
+    .site-header p { color: #6e7781; margin: 0 0 1.6em; }
+    .post { padding: 20px 0; border-bottom: 1px solid #eaeef2; }
+    .post:first-of-type { padding-top: 4px; }
+    .post:last-of-type { border-bottom: none; padding-bottom: 4px; }
+    .post h2 { margin: 0 0 6px; font-size: 1.28em; border: none; padding: 0; }
+    .post h2 a { color: #1f2328; }
+    .post h2 a:hover { color: #0969da; text-decoration: none; }
+    .post .meta { margin: 0 0 8px; }
+    .post .excerpt { margin: 0; color: #57606a; font-size: .95em; }
+    .empty { color: #6e7781; text-align: center; padding: 40px 0; }
+    footer {
+        margin-top: 2.5em; padding-top: 1.2em; border-top: 1px solid #eaeef2;
+        color: #8b949e; font-size: .85em;
+    }
+    footer a { color: #57606a; }
+    @media (max-width: 560px) {
+        body { padding: 10px; }
+        .container { padding: 20px; }
+        h1 { font-size: 1.55em; }
+    }
+</style>
+</head>
+<body>
+    <div class="container">
+        <a class="back" href="index.html">&larr; 返回首页</a>
+        <h1>小白版第10周：第一次使用 GitHub，不需要先学 Git 命令</h1>
+        <div class="meta"><time datetime="2026-11-14">2026-11-14</time><span class="sep">&middot;</span>小白十二周教程<span class="sep">&middot;</span><span class="tag">零基础</span><span class="tag">DeepSeek Harness</span><span class="tag">AI入门</span></div>
+<p><a href="harness-beginner.html">回到课程目录</a> · <a href="harness-beginner-week-09.html">上一课</a> · <a href="harness-beginner-week-11.html">下一课</a> · <a href="harness-beginner-help.html">卡住了看这里</a></p>
+<h2 id="这周只做一件事让自己的作品有一个网上的位置">这周只做一件事：让自己的作品有一个网上的位置</h2>
+<p>GitHub 是放代码与项目资料的网站。你可以把仓库理解成网上的项目文件夹。Git 则是管理修改记录的工具，和 GitHub 不是同一个东西。</p>
+<p><strong>本周只用浏览器，不安装 Git、不用命令行上传。</strong> 仓库设为公开后，别人可能看得到内容，所以先学会不上传秘密。</p>
+<h2 id="第64天注册自己的-github-账号">第64天：注册自己的 GitHub 账号</h2>
+<p>打开 <a href="https://github.com/" target="_blank" rel="noopener">https://github.com/</a>，找到 Sign up，按页面提示填写账号信息、完成邮箱验证与平台要求的验证步骤。已经有账号就登录。</p>
+<p>常见英文：Sign up 是注册，Sign in 是登录，Username 是用户名，Password 是密码。用户名以后可能出现在网址里，选一个你愿意公开的，不放身份证号或手机号。</p>
+<p>无法访问或验证失败时暂停，按官方帮助处理；不买共享账号，不把邮箱验证码和密码发给助手。</p>
+<h2 id="第65天创建第一个仓库">第65天：创建第一个仓库</h2>
+<p>登录后找右上角加号中的 New repository，或个人主页的 Repositories → New。页面位置可能调整，但目标是新建仓库。</p>
+<p>填写：</p>
+<ul>
+<li>Repository name：my-ai-learning，这是项目名字。</li>
+<li>Description：我的 DeepSeek Harness 学习练习，可选。</li>
+<li>可见性：这份公开展示练习选 Public；仅放已经审查过的模拟材料。</li>
+<li>如果有添加 README 的选项，勾上。README 是项目首页说明。</li>
+</ul>
+<p>点 Create repository。不要加付费套餐或无关服务。</p>
+<p><strong>完成标志：</strong> 页面网址大致是 github.com/你的用户名/my-ai-learning，并能看到文件列表。</p>
+<h2 id="第66天先只修改首页说明">第66天：先只修改首页说明</h2>
+<p>在文件列表点 README.md，再找编辑按钮，通常是铅笔图标。把内容改成三句自己的话：</p>
+<pre><code class="language-text">这是我的第一个 DeepSeek Harness 学习项目。
+目前我实际完成了：按真实情况填写。
+仍然不会或没验证的是：按真实情况填写。</code></pre>
+<p>.md 是 Markdown 文本，普通文字也能用；今天不必学花式排版。点 Commit changes 或保存修改，按弹窗写一句修改说明，再确认。</p>
+<p>Commit 可以先理解为保存这一版并留下记录，不是支付或公开 API 调用。</p>
+<h2 id="第67天第一次上传文件只选三个">第67天：第一次上传文件，只选三个</h2>
+<p>先在本地确认原始 requests.csv 已恢复。回到仓库文件列表，找 Add file → Upload files。</p>
+<p>点击选择文件，进入练习目录，<strong>只选 report.py、test_report.py、requests.csv</strong>，也可以分三次上传。不要拖整个 AI-Learn，更不要拖整个文档文件夹。</p>
+<p>确认上传列表没有 Key、聊天截图、真实资料或备份。写一句上传模拟练习文件，再点 Commit changes。</p>
+<p><strong>完成标志：</strong> 仓库列表能看到三个文件，点开显示的是代码或模拟表格。</p>
+<h2 id="第68天看一眼修改记录">第68天：看一眼修改记录</h2>
+<p>在仓库或文件页面找到 History／Commits。你应该能看到自己编辑说明和上传文件的记录。</p>
+<p>这就是为什么说 GitHub 不只是网盘：除了放文件，还能留修改记录。今天只看，不要求你会分支、合并或撤销。</p>
+<p>注意：以后即使删掉文件，旧记录里也可能还有内容。因此 Key 泄露时首先撤销密钥，不能只在网页上删除文件了事。</p>
+<h2 id="第69天模拟别人第一次访问">第69天：模拟别人第一次访问</h2>
+<p>复制仓库网址，打开浏览器无痕／隐私窗口粘贴进去。不要在这个窗口输入自己的 GitHub 密码，只看公开页面是否能打开。</p>
+<p>看 README 是否说明这是学习练习、哪些是参考材料、自己实际改了哪里。别人没看课程，能否知道这个项目是做什么的？不清楚就再改三句话。</p>
+<h2 id="第70天本周过关">第70天：本周过关</h2>
+<p>能登录、找到自己的仓库、编辑 README、上传指定文件、复制链接。知道公开就是别人可能看见，知道仓库不是电脑上的同名文件夹。</p>
+<p><strong>还不需要会 Git 命令。</strong> 浏览器上传已经够你迈出第一步，后面需要团队协作、频繁改代码时再补 Git。</p>
+<h2 id="卡住时这样求助">卡住时这样求助</h2>
+<pre><code class="language-text">我已经登录 GitHub，仓库名是 my-ai-learning。
+我想上传三个无秘密的练习文件，现在停在这个页面。
+请解释我看到的英文，并只告诉我下一次点哪里。
+不要让我先安装 Git，也不要索要登录信息。</code></pre>
+<p>暂时不能注册或访问 GitHub时，先保留本地作品并标记未发布，继续阅读下一周，不虚构一个已上线链接。</p>
+<hr>
+<p><a href="harness-beginner.html">回到课程目录</a> · <a href="harness-beginner-week-09.html">上一课</a> · <a href="harness-beginner-week-11.html">下一课</a> · <a href="harness-beginner-help.html">卡住了看这里</a></p>
+
+        <footer>&copy; 2026 &middot; <a href="feed.xml">RSS</a></footer>
+    </div>
+</body>
+</html>

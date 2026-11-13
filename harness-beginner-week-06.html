@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>小白版第6周：会看运行结果，也会检查 AI 有没有改错 - 我的博客</title>
+    <meta name="description" content="从零开始，逐步操作：会看运行结果，也会检查 AI 有没有改错。说明在哪里点、输入什么、看到什么和出错怎么办。">
+    <link rel="canonical" href="https://jjoji9600-lang.github.io/harness-beginner-week-06.html">
+    <meta property="og:url" content="https://jjoji9600-lang.github.io/harness-beginner-week-06.html">
+    <link rel="alternate" type="application/rss+xml" href="feed.xml" title="RSS">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="小白版第6周：会看运行结果，也会检查 AI 有没有改错">
+    <meta property="og:description" content="从零开始，逐步操作：会看运行结果，也会检查 AI 有没有改错。说明在哪里点、输入什么、看到什么和出错怎么办。">
+    <style>
+    * { box-sizing: border-box; }
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
+            "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+        max-width: 820px; margin: 0 auto; padding: 20px;
+        background: #f5f5f5; color: #24292f; line-height: 1.75; font-size: 16px;
+        -webkit-font-smoothing: antialiased;
+    }
+    .container {
+        background: #fff; padding: 34px; border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0,0,0,.08);
+    }
+    h1, h2, h3, h4, h5, h6 { color: #1f2328; line-height: 1.3; }
+    h1 { font-size: 1.9em; margin: 0 0 .4em; }
+    h2 { font-size: 1.45em; margin: 1.8em 0 .7em; padding-bottom: .25em; border-bottom: 1px solid #eaeef2; }
+    h3 { font-size: 1.2em; margin: 1.5em 0 .6em; }
+    h4 { font-size: 1.05em; margin: 1.3em 0 .5em; }
+    p { margin: .9em 0; }
+    a { color: #0969da; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    img { max-width: 100%; height: auto; border-radius: 4px; }
+    ul, ol { padding-left: 1.7em; margin: .9em 0; }
+    li { margin: .3em 0; }
+    li > ul, li > ol { margin: .25em 0; }
+    blockquote {
+        margin: 1.1em 0; padding: .3em 1.1em; border-left: 4px solid #d0d7de;
+        color: #57606a; background: #f6f8fa; border-radius: 0 4px 4px 0;
+    }
+    blockquote p { margin: .4em 0; }
+    hr { border: none; border-top: 1px solid #eaeef2; margin: 2em 0; }
+    pre {
+        background: #1e1e1e; color: #d4d4d4; padding: 16px; border-radius: 6px;
+        overflow-x: auto; line-height: 1.55; font-size: .9em;
+    }
+    pre code { background: none; color: inherit; padding: 0; font-size: inherit; }
+    code { font-family: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace; font-size: .92em; }
+    p code, li code, td code, blockquote code {
+        background: #eff1f3; padding: 2px 6px; border-radius: 4px;
+    }
+    table { border-collapse: collapse; width: 100%; margin: 1.2em 0; font-size: .94em; display: block; overflow-x: auto; }
+    th, td { border: 1px solid #e1e4e8; padding: 7px 12px; text-align: left; }
+    th { background: #f6f8fa; font-weight: 600; }
+    tbody tr:nth-child(even) td { background: #fafbfc; }
+    .back { display: inline-block; margin-bottom: 18px; color: #0969da; font-size: .92em; }
+    .meta { color: #6e7781; font-size: .88em; margin: 0 0 2em; }
+    .meta .sep { margin: 0 8px; color: #d0d7de; }
+    .tag {
+        display: inline-block; padding: 1px 9px; background: #ddf4ff; color: #0969da;
+        border-radius: 12px; font-size: .82em; margin-right: 6px; white-space: nowrap;
+    }
+    .site-header { margin-bottom: 8px; }
+    .site-header h1 { margin-bottom: .2em; }
+    .site-header p { color: #6e7781; margin: 0 0 1.6em; }
+    .post { padding: 20px 0; border-bottom: 1px solid #eaeef2; }
+    .post:first-of-type { padding-top: 4px; }
+    .post:last-of-type { border-bottom: none; padding-bottom: 4px; }
+    .post h2 { margin: 0 0 6px; font-size: 1.28em; border: none; padding: 0; }
+    .post h2 a { color: #1f2328; }
+    .post h2 a:hover { color: #0969da; text-decoration: none; }
+    .post .meta { margin: 0 0 8px; }
+    .post .excerpt { margin: 0; color: #57606a; font-size: .95em; }
+    .empty { color: #6e7781; text-align: center; padding: 40px 0; }
+    footer {
+        margin-top: 2.5em; padding-top: 1.2em; border-top: 1px solid #eaeef2;
+        color: #8b949e; font-size: .85em;
+    }
+    footer a { color: #57606a; }
+    @media (max-width: 560px) {
+        body { padding: 10px; }
+        .container { padding: 20px; }
+        h1 { font-size: 1.55em; }
+    }
+</style>
+</head>
+<body>
+    <div class="container">
+        <a class="back" href="index.html">&larr; 返回首页</a>
+        <h1>小白版第6周：会看运行结果，也会检查 AI 有没有改错</h1>
+        <div class="meta"><time datetime="2026-11-14">2026-11-14</time><span class="sep">&middot;</span>小白十二周教程<span class="sep">&middot;</span><span class="tag">零基础</span><span class="tag">DeepSeek Harness</span><span class="tag">AI入门</span></div>
+<p><a href="harness-beginner.html">回到课程目录</a> · <a href="harness-beginner-week-05.html">上一课</a> · <a href="harness-beginner-week-07.html">下一课</a> · <a href="harness-beginner-help.html">卡住了看这里</a></p>
+<h2 id="这周只做一件事知道程序有没有算错ai-有没有改错">这周只做一件事：知道程序有没有算错，AI 有没有改错</h2>
+<p>测试可以理解为自动核对答案的小检查。它不是神奇的正确证明，只会检查你事先写好的情况。练习包里有六个检查，帮你先体验。</p>
+<p>先备份：在文件资源管理器选中 requests.csv，Ctrl+C、Ctrl+V，保留副本；也复制 report.py 留一个副本。先不需要学 Git。</p>
+<h2 id="第36天第一次运行检查">第36天：第一次运行检查</h2>
+<p>按上周方法，在练习目录打开终端，输入：</p>
+<pre><code class="language-powershell">python -m unittest -v</code></pre>
+<p>这条稍长，暂时整体理解为运行当前文件夹的测试。若你前面用 py，这里仍替换为 py。</p>
+<p><strong>应该看到：</strong> 六项检查，最后类似 Ran 6 tests 和 OK。英文 OK 表示这些检查通过；不代表所有真实业务情况都检查过。</p>
+<p>把末尾结果记下来。显示 Ran 0 tests 不是全通过，而是没有找到检查，要先确认目录中有 test_report.py。</p>
+<h2 id="第37天亲手验证输入变了结果会不会跟着变">第37天：亲手验证输入变了，结果会不会跟着变</h2>
+<p>右键 requests.csv，选择打开方式 → 记事本，不要默认让陌生软件修改它。找到第一行数据末尾的 10，改成20，其他逗号和表头不动，Ctrl+S。</p>
+<p>重新运行 python report.py，再打开 weekly.txt。<strong>总分钟应从60变70，其他三项不变。</strong> 这是你自己能核对的变化，不需要信模型。</p>
+<p>完成后把20改回10，再运行一次，确认恢复60。测试中的原始数字检查只适用于原始材料，所以改数期间它失败是有原因的。</p>
+<h2 id="第38天安全地制造一次错误">第38天：安全地制造一次错误</h2>
+<p>在确认有备份的情况下，将同一处分钟临时改为 -1，保存，再运行 report.py。</p>
+<p>应该看到分钟不能是负数、没有生成新的周报，并且本轮没有成功提示。之前的 weekly.txt 可能还在，不要误以为新任务已成功。</p>
+<p>把 -1 恢复10，保存重跑。<strong>完成标志：</strong> 知道合理失败是什么，不要求程序面对坏数据也硬做完。</p>
+<h2 id="第39天让-dsh-先提方案不立刻动手">第39天：让 DSH 先提方案，不立刻动手</h2>
+<p>发送：</p>
+<pre><code class="language-text">我想让 weekly.txt 第一行从模拟求助周报改成我的第一份AI周报。
+先只读取 report.py，告诉我需要改哪里，暂时不写文件。
+不改 requests.csv、不改任何计算、不改测试。
+我确认后再做。</code></pre>
+<p>看它计划是否只涉及标题。这个改动很小，正适合练习控制范围。若它要重写整套项目，告诉它只改标题。</p>
+<h2 id="第40天批准修改亲自核对">第40天：批准修改，亲自核对</h2>
+<p>确认后回复：可以，只改标题。查看 DSH 的实际修改记录，再用记事本打开 report.py，或在软件差异视图里查看。</p>
+<p>差异就是修改前后哪里不同。你现在不需要懂全部代码，也应能确认只改了一句标题，没有改输入数据、没有删除校验。</p>
+<p>运行 python report.py 和本周第一天的测试命令。确认新标题生效、四个数字未变、六个检查仍通过。</p>
+<h2 id="第41天练习恢复不用危险命令">第41天：练习恢复，不用危险命令</h2>
+<p>本周先用最容易理解的恢复方式：找到你备份的 report.py 副本，复制回原文件名。系统询问是否替换时，先确认目标确实是本练习文件。</p>
+<p>再运行程序，标题应恢复。然后决定是否重新做标题修改。不要为了撤销一句标题，照抄删除整个目录或强制重置的命令。</p>
+<h2 id="第42天写一段失败记录">第42天：写一段失败记录</h2>
+<p>在 learn.txt 写下：我改了什么、预期是什么、实际看到什么、怎样恢复。写真实的一次即可，不要求漂亮格式。</p>
+<p><strong>本周过关：</strong> 知道测试成功和0个测试的区别；输入改变能预测输出；错误数据会停；AI 的修改必须自己看；能从副本恢复。</p>
+<h2 id="一个很重要的问题">一个很重要的问题</h2>
+<p>六个检查全过，能不能说程序永远不会错？不能。它只是通过了这六个场景。以后逐步补更多检查，比说我已让 AI 检查过可靠。</p>
+<p>工作和面试时，拿出一次真实失败与排查过程，比只说系统很稳定更有说服力。</p>
+<hr>
+<p><a href="harness-beginner.html">回到课程目录</a> · <a href="harness-beginner-week-05.html">上一课</a> · <a href="harness-beginner-week-07.html">下一课</a> · <a href="harness-beginner-help.html">卡住了看这里</a></p>
+
+        <footer>&copy; 2026 &middot; <a href="feed.xml">RSS</a></footer>
+    </div>
+</body>
+</html>
