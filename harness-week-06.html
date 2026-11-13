@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第 6 周｜用 Git、测试与审查约束 Agent - 我的博客</title>
+    <meta name="description" content="第 6 周：用 Git、测试与审查约束 Agent。含每日任务、操作步骤、提示词、验收与排错。">
+    <link rel="canonical" href="https://jjoji9600-lang.github.io/harness-week-06.html">
+    <meta property="og:url" content="https://jjoji9600-lang.github.io/harness-week-06.html">
+    <link rel="alternate" type="application/rss+xml" href="feed.xml" title="RSS">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="第 6 周｜用 Git、测试与审查约束 Agent">
+    <meta property="og:description" content="第 6 周：用 Git、测试与审查约束 Agent。含每日任务、操作步骤、提示词、验收与排错。">
+    <style>
+    * { box-sizing: border-box; }
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
+            "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+        max-width: 820px; margin: 0 auto; padding: 20px;
+        background: #f5f5f5; color: #24292f; line-height: 1.75; font-size: 16px;
+        -webkit-font-smoothing: antialiased;
+    }
+    .container {
+        background: #fff; padding: 34px; border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0,0,0,.08);
+    }
+    h1, h2, h3, h4, h5, h6 { color: #1f2328; line-height: 1.3; }
+    h1 { font-size: 1.9em; margin: 0 0 .4em; }
+    h2 { font-size: 1.45em; margin: 1.8em 0 .7em; padding-bottom: .25em; border-bottom: 1px solid #eaeef2; }
+    h3 { font-size: 1.2em; margin: 1.5em 0 .6em; }
+    h4 { font-size: 1.05em; margin: 1.3em 0 .5em; }
+    p { margin: .9em 0; }
+    a { color: #0969da; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    img { max-width: 100%; height: auto; border-radius: 4px; }
+    ul, ol { padding-left: 1.7em; margin: .9em 0; }
+    li { margin: .3em 0; }
+    li > ul, li > ol { margin: .25em 0; }
+    blockquote {
+        margin: 1.1em 0; padding: .3em 1.1em; border-left: 4px solid #d0d7de;
+        color: #57606a; background: #f6f8fa; border-radius: 0 4px 4px 0;
+    }
+    blockquote p { margin: .4em 0; }
+    hr { border: none; border-top: 1px solid #eaeef2; margin: 2em 0; }
+    pre {
+        background: #1e1e1e; color: #d4d4d4; padding: 16px; border-radius: 6px;
+        overflow-x: auto; line-height: 1.55; font-size: .9em;
+    }
+    pre code { background: none; color: inherit; padding: 0; font-size: inherit; }
+    code { font-family: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace; font-size: .92em; }
+    p code, li code, td code, blockquote code {
+        background: #eff1f3; padding: 2px 6px; border-radius: 4px;
+    }
+    table { border-collapse: collapse; width: 100%; margin: 1.2em 0; font-size: .94em; display: block; overflow-x: auto; }
+    th, td { border: 1px solid #e1e4e8; padding: 7px 12px; text-align: left; }
+    th { background: #f6f8fa; font-weight: 600; }
+    tbody tr:nth-child(even) td { background: #fafbfc; }
+    .back { display: inline-block; margin-bottom: 18px; color: #0969da; font-size: .92em; }
+    .meta { color: #6e7781; font-size: .88em; margin: 0 0 2em; }
+    .meta .sep { margin: 0 8px; color: #d0d7de; }
+    .tag {
+        display: inline-block; padding: 1px 9px; background: #ddf4ff; color: #0969da;
+        border-radius: 12px; font-size: .82em; margin-right: 6px; white-space: nowrap;
+    }
+    .site-header { margin-bottom: 8px; }
+    .site-header h1 { margin-bottom: .2em; }
+    .site-header p { color: #6e7781; margin: 0 0 1.6em; }
+    .post { padding: 20px 0; border-bottom: 1px solid #eaeef2; }
+    .post:first-of-type { padding-top: 4px; }
+    .post:last-of-type { border-bottom: none; padding-bottom: 4px; }
+    .post h2 { margin: 0 0 6px; font-size: 1.28em; border: none; padding: 0; }
+    .post h2 a { color: #1f2328; }
+    .post h2 a:hover { color: #0969da; text-decoration: none; }
+    .post .meta { margin: 0 0 8px; }
+    .post .excerpt { margin: 0; color: #57606a; font-size: .95em; }
+    .empty { color: #6e7781; text-align: center; padding: 40px 0; }
+    footer {
+        margin-top: 2.5em; padding-top: 1.2em; border-top: 1px solid #eaeef2;
+        color: #8b949e; font-size: .85em;
+    }
+    footer a { color: #57606a; }
+    @media (max-width: 560px) {
+        body { padding: 10px; }
+        .container { padding: 20px; }
+        h1 { font-size: 1.55em; }
+    }
+</style>
+</head>
+<body>
+    <div class="container">
+        <a class="back" href="index.html">&larr; 返回首页</a>
+        <h1>第 6 周｜用 Git、测试与审查约束 Agent</h1>
+        <div class="meta"><time datetime="2026-11-14">2026-11-14</time><span class="sep">&middot;</span>十二周实战课<span class="sep">&middot;</span><span class="tag">Harness</span><span class="tag">DeepSeek</span><span class="tag">AI入门</span><span class="tag">实战教程</span></div>
+<p><a href="harness-12-weeks.html">课程总览</a> · <a href="harness-week-05.html">上一站</a> · <a href="harness-week-07.html">下一站</a></p>
+<h2 id="本周目标">本周目标</h2>
+<p>把 DSH 的改代码能力放进 Git 与测试的约束中，建立可审查、可回滚的修复循环。交付至少两次小提交、一项新增测试、一份 review 记录。</p>
+<p>Git 是版本控制，不是备份所有文件的工具。测试也是行为证据，不是模型说已运行的一句总结。</p>
+<h2 id="每日教程第-3642-天">每日教程：第 36—42 天</h2>
+<table>
+<thead><tr>
+<th>天</th>
+<th>操作</th>
+<th>当天证据</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>36</td>
+<td>在解压目录初始化 Git，检查 .gitignore，逐项选择基础代码与模拟数据加入。</td>
+<td>初始提交与文件列表</td>
+</tr>
+<tr>
+<td>37</td>
+<td>创建学习分支，运行现有 16 个测试，记录基线；测试数随后新增会变化。</td>
+<td>基线命令与退出码</td>
+</tr>
+<tr>
+<td>38</td>
+<td>为 open 工单数或一个数据边界先写失败测试；不要同时修改实现。</td>
+<td>确实失败的测试输出</td>
+</tr>
+<tr>
+<td>39</td>
+<td>让 DSH 只修复这项行为，不重构无关模块；运行针对测试与完整测试。</td>
+<td>最小差异与通过证据</td>
+</tr>
+<tr>
+<td>40</td>
+<td>做代码审查：意外依赖、凭证、输入校验、错误处理、测试是否变弱。</td>
+<td>docs/review.md</td>
+</tr>
+<tr>
+<td>41</td>
+<td>在测试分支尝试恢复一个已知小变更，理解 revert 与 restore 的区别；不执行不懂的破坏性命令。</td>
+<td>回滚前后行为说明</td>
+</tr>
+<tr>
+<td>42</td>
+<td>新会话或新目录复现，确保不依赖未提交文件。整理一次 PR 风格说明。</td>
+<td>提交、测试与复现记录</td>
+</tr>
+</tbody>
+</table>
+<h2 id="跟做建立基线">跟做：建立基线</h2>
+<p>首次独立练习目录才执行 init；在已有仓库不重复创建嵌套仓库：</p>
+<pre><code class="language-powershell">git init
+git status --short
+git add .gitignore README.md .env.example src tests data docs evals
+git diff --cached --stat
+git diff --cached
+git commit -m 'Add harness lab baseline'
+git switch -c learn/report-open-count
+python -m unittest discover -s tests -v</code></pre>
+<p>提交前自己检查暂存差异。若 Git 要求身份，使用你希望公开的姓名与邮箱，必要时使用 GitHub 的隐私邮箱。不要盲目 git add 整个电脑目录，也不把 output、runs、真实 .env 提交。</p>
+<h2 id="交给-dsh-的修复任务">交给 DSH 的修复任务</h2>
+<pre><code class="language-text">先读取当前差异与需求，确认本次只增加 open 统计。
+先给出测试计划，等我确认后修改相关测试和实现。
+不得删除或跳过原测试，不改模拟输入来让测试通过。
+不引入第三方依赖，不修改无关文件，不提交或推送。
+每轮修改后运行针对测试，最后运行完整测试。
+连续两轮相同失败后停止并说明假设与下一步。</code></pre>
+<p>要求它提交报告：改动文件、行为变化、测试命令、真实退出码、已知风险。真正的提交与推送由你批准。</p>
+<h2 id="读懂-git-差异">读懂 Git 差异</h2>
+<pre><code class="language-powershell">git status --short
+git diff
+git diff --check
+python -m unittest discover -s tests -v</code></pre>
+<p>diff --check 主要查空白等问题，不证明逻辑正确。无测试失败也不证明业务正确，尤其测试可能根本没有覆盖新增 student 版本。</p>
+<p>不要轻易使用 reset --hard、clean -fd 或强制推送。想撤销已提交的共享变更，通常考虑 git revert，并确认它会创建新提交；恢复未提交文件可能丢掉工作，先保存差异并确认目标。</p>
+<h2 id="必须保留的边界测试">必须保留的边界测试</h2>
+<p>缺文件、列不对、重复 id、非法 status、负数 minutes、路径越界、非 JSON 响应、非法标签。练习包已有部分覆盖，本周至少补充一种未覆盖情形，例如重复 CSV id 或 minutes=-1。</p>
+<p>可以用临时目录与测试中构造的 CSV，不修改真实 data/tickets.csv。测试失败先看最小原因，不把所有断言改宽松。</p>
+<h2 id="面试与验收">面试与验收</h2>
+<p>问：Agent 改完测试全绿就能合并吗？答：还要检查覆盖、验收口径、权限、副作用与差异，关键变更需要人审。</p>
+<p>问：红—绿—重构是什么？答：先证明测试能捕获目标行为缺失，再最小实现使其通过，最后在保持测试的前提下改进结构。</p>
+<p>问：如何防止 Agent 无限修复？答：限制轮次、时间、预算，记录失败，满足停机条件就交给人，不让模型无止境试错。</p>
+<p>验收：有基线与至少两次有意义的小提交；新增测试真实覆盖你的代码；完整测试通过；能说明如何安全撤销变更。失败记录可保留，敏感日志不可提交。</p>
+<hr>
+<p><a href="harness-12-weeks.html">课程总览</a> · <a href="harness-week-05.html">上一站</a> · <a href="harness-week-07.html">下一站</a></p>
+
+        <footer>&copy; 2026 &middot; <a href="feed.xml">RSS</a></footer>
+    </div>
+</body>
+</html>

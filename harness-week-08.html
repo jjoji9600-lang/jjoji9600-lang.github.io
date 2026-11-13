@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第 8 周｜理解 Profile、插件与运行边界 - 我的博客</title>
+    <meta name="description" content="第 8 周：理解 Profile、插件与运行边界。含每日任务、操作步骤、提示词、验收与排错。">
+    <link rel="canonical" href="https://jjoji9600-lang.github.io/harness-week-08.html">
+    <meta property="og:url" content="https://jjoji9600-lang.github.io/harness-week-08.html">
+    <link rel="alternate" type="application/rss+xml" href="feed.xml" title="RSS">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="第 8 周｜理解 Profile、插件与运行边界">
+    <meta property="og:description" content="第 8 周：理解 Profile、插件与运行边界。含每日任务、操作步骤、提示词、验收与排错。">
+    <style>
+    * { box-sizing: border-box; }
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
+            "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+        max-width: 820px; margin: 0 auto; padding: 20px;
+        background: #f5f5f5; color: #24292f; line-height: 1.75; font-size: 16px;
+        -webkit-font-smoothing: antialiased;
+    }
+    .container {
+        background: #fff; padding: 34px; border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0,0,0,.08);
+    }
+    h1, h2, h3, h4, h5, h6 { color: #1f2328; line-height: 1.3; }
+    h1 { font-size: 1.9em; margin: 0 0 .4em; }
+    h2 { font-size: 1.45em; margin: 1.8em 0 .7em; padding-bottom: .25em; border-bottom: 1px solid #eaeef2; }
+    h3 { font-size: 1.2em; margin: 1.5em 0 .6em; }
+    h4 { font-size: 1.05em; margin: 1.3em 0 .5em; }
+    p { margin: .9em 0; }
+    a { color: #0969da; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    img { max-width: 100%; height: auto; border-radius: 4px; }
+    ul, ol { padding-left: 1.7em; margin: .9em 0; }
+    li { margin: .3em 0; }
+    li > ul, li > ol { margin: .25em 0; }
+    blockquote {
+        margin: 1.1em 0; padding: .3em 1.1em; border-left: 4px solid #d0d7de;
+        color: #57606a; background: #f6f8fa; border-radius: 0 4px 4px 0;
+    }
+    blockquote p { margin: .4em 0; }
+    hr { border: none; border-top: 1px solid #eaeef2; margin: 2em 0; }
+    pre {
+        background: #1e1e1e; color: #d4d4d4; padding: 16px; border-radius: 6px;
+        overflow-x: auto; line-height: 1.55; font-size: .9em;
+    }
+    pre code { background: none; color: inherit; padding: 0; font-size: inherit; }
+    code { font-family: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace; font-size: .92em; }
+    p code, li code, td code, blockquote code {
+        background: #eff1f3; padding: 2px 6px; border-radius: 4px;
+    }
+    table { border-collapse: collapse; width: 100%; margin: 1.2em 0; font-size: .94em; display: block; overflow-x: auto; }
+    th, td { border: 1px solid #e1e4e8; padding: 7px 12px; text-align: left; }
+    th { background: #f6f8fa; font-weight: 600; }
+    tbody tr:nth-child(even) td { background: #fafbfc; }
+    .back { display: inline-block; margin-bottom: 18px; color: #0969da; font-size: .92em; }
+    .meta { color: #6e7781; font-size: .88em; margin: 0 0 2em; }
+    .meta .sep { margin: 0 8px; color: #d0d7de; }
+    .tag {
+        display: inline-block; padding: 1px 9px; background: #ddf4ff; color: #0969da;
+        border-radius: 12px; font-size: .82em; margin-right: 6px; white-space: nowrap;
+    }
+    .site-header { margin-bottom: 8px; }
+    .site-header h1 { margin-bottom: .2em; }
+    .site-header p { color: #6e7781; margin: 0 0 1.6em; }
+    .post { padding: 20px 0; border-bottom: 1px solid #eaeef2; }
+    .post:first-of-type { padding-top: 4px; }
+    .post:last-of-type { border-bottom: none; padding-bottom: 4px; }
+    .post h2 { margin: 0 0 6px; font-size: 1.28em; border: none; padding: 0; }
+    .post h2 a { color: #1f2328; }
+    .post h2 a:hover { color: #0969da; text-decoration: none; }
+    .post .meta { margin: 0 0 8px; }
+    .post .excerpt { margin: 0; color: #57606a; font-size: .95em; }
+    .empty { color: #6e7781; text-align: center; padding: 40px 0; }
+    footer {
+        margin-top: 2.5em; padding-top: 1.2em; border-top: 1px solid #eaeef2;
+        color: #8b949e; font-size: .85em;
+    }
+    footer a { color: #57606a; }
+    @media (max-width: 560px) {
+        body { padding: 10px; }
+        .container { padding: 20px; }
+        h1 { font-size: 1.55em; }
+    }
+</style>
+</head>
+<body>
+    <div class="container">
+        <a class="back" href="index.html">&larr; 返回首页</a>
+        <h1>第 8 周｜理解 Profile、插件与运行边界</h1>
+        <div class="meta"><time datetime="2026-11-14">2026-11-14</time><span class="sep">&middot;</span>十二周实战课<span class="sep">&middot;</span><span class="tag">Harness</span><span class="tag">DeepSeek</span><span class="tag">AI入门</span><span class="tag">实战教程</span></div>
+<p><a href="harness-12-weeks.html">课程总览</a> · <a href="harness-week-07.html">上一站</a> · <a href="harness-week-09.html">下一站</a></p>
+<h2 id="本周目标">本周目标</h2>
+<p>理解 DSH 的 Profile 与插件组合，能解释能力从哪里来、故障发生在哪一层，并为自己的业务工具写出清晰契约。本周不要求零基础者修改 DSH 内核或开发生产插件。</p>
+<p>交付 docs/architecture.md、docs/tool-contract.md、docs/failure-policy.md；进阶可在独立 profile 试验官方插件示例，但不能影响日常主 profile。</p>
+<h2 id="核心结构">核心结构</h2>
+<p>DSH 基于插件架构。Profile 组织要加载的 bundle／插件及覆盖配置，插件提供模型、工具、会话、技能、界面等能力。不同入口和 profile 的能力不一定相同；界面是表层，提供方、权限与执行链路是另外几层。</p>
+<pre><code class="language-text">用户任务 → 入口 / Profile
+          → 模型提供方 → DeepSeek API
+          → 工具注册与执行 → 文件 / 终端 / 业务工具
+          → 会话、状态、技能与安全策略
+          → 产物、测试与运行证据</code></pre>
+<p>图是概念图，不是所有版本内部调用关系的完整实现。看当前源码与配置才能确认具体依赖。</p>
+<h2 id="每日教程第-5056-天">每日教程：第 50—56 天</h2>
+<table>
+<thead><tr>
+<th>天</th>
+<th>操作</th>
+<th>当天证据</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>50</td>
+<td>读 dsh --help，区分 web、tui、headless 等入口与 profile；只记录本机实际存在项。</td>
+<td>入口与用途表</td>
+</tr>
+<tr>
+<td>51</td>
+<td>阅读当前 profile 的 package.json 中 bundles／依赖信息，记录插件名和版本，不导出密钥配置。</td>
+<td>架构图与依赖摘要</td>
+</tr>
+<tr>
+<td>52</td>
+<td>只读查看插件列表，定位模型、工具、Skill、会话对应能力；不安装新包。</td>
+<td>能力—提供方映射</td>
+</tr>
+<tr>
+<td>53</td>
+<td>将周报工具定义为输入 schema、输出 schema、错误码、权限和副作用的契约。</td>
+<td>docs/tool-contract.md</td>
+</tr>
+<tr>
+<td>54</td>
+<td>分别模拟模型失败、工具失败、结果校验失败，设计不同停止／重试策略。</td>
+<td>docs/failure-policy.md</td>
+</tr>
+<tr>
+<td>55</td>
+<td>测试路径越界、超大输入、重复运行等边界；用测试，不让 Agent 接触真实秘密。</td>
+<td>边界测试与限制说明</td>
+</tr>
+<tr>
+<td>56</td>
+<td>不看笔记解释架构，指出本项目实际实现与仅设计部分；进阶才尝试官方插件示例。</td>
+<td>10 分钟架构讲解录音或提纲</td>
+</tr>
+</tbody>
+</table>
+<h2 id="安全地检查配置">安全地检查配置</h2>
+<pre><code class="language-powershell">dsh --help
+dsh web --help
+dsh plugin --profile web list</code></pre>
+<p>最后一条通过当前 CLI 的插件管理入口查看依赖，实际输出取决于 profile。不要把默认配置或 --dump-config 的完整输出直接上传；可能含凭证、主机名、文件路径。只记录脱敏后的插件名、版本与结构。</p>
+<p>自定义 profile 应先查看当前官方说明、备份并确认名字未占用。--from-default-profile 会替换目标 profile，不要把现有工作 profile 当实验目标；本课不要求执行替换命令。</p>
+<h2 id="一个业务工具契约">一个业务工具契约</h2>
+<pre><code class="language-json">{
+  "name": "build_ticket_report",
+  "input": {"input_name": "tickets.csv", "output_name": "weekly.md", "dry_run": true},
+  "output": {"ok": true, "total": 12, "closed": 8, "minutes": 360},
+  "errors": ["invalid_schema", "path_denied", "input_missing", "write_failed"],
+  "side_effects": "dry_run=false 时仅写 output 下指定文件"
+}</code></pre>
+<p>这是一份设计契约，不是已经注册到 DSH 的插件。练习包提供 CLI 实现；DSH 可以经批准调用 CLI。真正注册原生工具需要按当前 SDK／插件 API 实现并验证，不能把一份 JSON 冒充完成的集成。</p>
+<p>必要设计：参数类型与大小限制、路径白名单、有限执行时间、安全错误信息、输出大小上限、审计标识。参数中不接受任意 shell 命令；业务 text 绝不进入可执行表达式。模型提出请求后仍须由工具层检查。</p>
+<h2 id="执行循环与失败策略">执行循环与失败策略</h2>
+<p>循环应有最大步骤、墙钟时间、请求次数和预算；错误分为临时网络故障、永久输入错误、权限拒绝、业务校验失败。永久错误不应盲目重试，可能有副作用的操作还要解决幂等与重复执行。</p>
+<p>本课程参考 API 客户端仅调用一轮、不自动重试。DSH 自身的限制应按当前版本实际支持能力配置并测试；没有硬限制时采用人工计数和受控环境，不伪称已具备账户级限额。</p>
+<h2 id="面试与验收">面试与验收</h2>
+<p>问：为什么某 profile 能调用工具、另一个不能？先查插件组合、工具注册、权限和提供方能力，不先归因模型不聪明。</p>
+<p>问：工具错误为什么要结构化？便于区分可重试、需人工介入和永久错误，也避免模型从一大段不确定报错中猜测。</p>
+<p>验收：能画架构图、解释两层以上故障边界；工具契约覆盖输入输出权限错误；明确哪些已实现、哪些仅设计。插件开发未做就如实说明，不写进简历冒充经验。</p>
+<hr>
+<p><a href="harness-12-weeks.html">课程总览</a> · <a href="harness-week-07.html">上一站</a> · <a href="harness-week-09.html">下一站</a></p>
+
+        <footer>&copy; 2026 &middot; <a href="feed.xml">RSS</a></footer>
+    </div>
+</body>
+</html>

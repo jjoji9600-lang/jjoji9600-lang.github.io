@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第 5 周｜用 Python 编写确定性工具 - 我的博客</title>
+    <meta name="description" content="第 5 周：用 Python 编写确定性工具。含每日任务、操作步骤、提示词、验收与排错。">
+    <link rel="canonical" href="https://jjoji9600-lang.github.io/harness-week-05.html">
+    <meta property="og:url" content="https://jjoji9600-lang.github.io/harness-week-05.html">
+    <link rel="alternate" type="application/rss+xml" href="feed.xml" title="RSS">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="第 5 周｜用 Python 编写确定性工具">
+    <meta property="og:description" content="第 5 周：用 Python 编写确定性工具。含每日任务、操作步骤、提示词、验收与排错。">
+    <style>
+    * { box-sizing: border-box; }
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
+            "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+        max-width: 820px; margin: 0 auto; padding: 20px;
+        background: #f5f5f5; color: #24292f; line-height: 1.75; font-size: 16px;
+        -webkit-font-smoothing: antialiased;
+    }
+    .container {
+        background: #fff; padding: 34px; border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0,0,0,.08);
+    }
+    h1, h2, h3, h4, h5, h6 { color: #1f2328; line-height: 1.3; }
+    h1 { font-size: 1.9em; margin: 0 0 .4em; }
+    h2 { font-size: 1.45em; margin: 1.8em 0 .7em; padding-bottom: .25em; border-bottom: 1px solid #eaeef2; }
+    h3 { font-size: 1.2em; margin: 1.5em 0 .6em; }
+    h4 { font-size: 1.05em; margin: 1.3em 0 .5em; }
+    p { margin: .9em 0; }
+    a { color: #0969da; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    img { max-width: 100%; height: auto; border-radius: 4px; }
+    ul, ol { padding-left: 1.7em; margin: .9em 0; }
+    li { margin: .3em 0; }
+    li > ul, li > ol { margin: .25em 0; }
+    blockquote {
+        margin: 1.1em 0; padding: .3em 1.1em; border-left: 4px solid #d0d7de;
+        color: #57606a; background: #f6f8fa; border-radius: 0 4px 4px 0;
+    }
+    blockquote p { margin: .4em 0; }
+    hr { border: none; border-top: 1px solid #eaeef2; margin: 2em 0; }
+    pre {
+        background: #1e1e1e; color: #d4d4d4; padding: 16px; border-radius: 6px;
+        overflow-x: auto; line-height: 1.55; font-size: .9em;
+    }
+    pre code { background: none; color: inherit; padding: 0; font-size: inherit; }
+    code { font-family: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace; font-size: .92em; }
+    p code, li code, td code, blockquote code {
+        background: #eff1f3; padding: 2px 6px; border-radius: 4px;
+    }
+    table { border-collapse: collapse; width: 100%; margin: 1.2em 0; font-size: .94em; display: block; overflow-x: auto; }
+    th, td { border: 1px solid #e1e4e8; padding: 7px 12px; text-align: left; }
+    th { background: #f6f8fa; font-weight: 600; }
+    tbody tr:nth-child(even) td { background: #fafbfc; }
+    .back { display: inline-block; margin-bottom: 18px; color: #0969da; font-size: .92em; }
+    .meta { color: #6e7781; font-size: .88em; margin: 0 0 2em; }
+    .meta .sep { margin: 0 8px; color: #d0d7de; }
+    .tag {
+        display: inline-block; padding: 1px 9px; background: #ddf4ff; color: #0969da;
+        border-radius: 12px; font-size: .82em; margin-right: 6px; white-space: nowrap;
+    }
+    .site-header { margin-bottom: 8px; }
+    .site-header h1 { margin-bottom: .2em; }
+    .site-header p { color: #6e7781; margin: 0 0 1.6em; }
+    .post { padding: 20px 0; border-bottom: 1px solid #eaeef2; }
+    .post:first-of-type { padding-top: 4px; }
+    .post:last-of-type { border-bottom: none; padding-bottom: 4px; }
+    .post h2 { margin: 0 0 6px; font-size: 1.28em; border: none; padding: 0; }
+    .post h2 a { color: #1f2328; }
+    .post h2 a:hover { color: #0969da; text-decoration: none; }
+    .post .meta { margin: 0 0 8px; }
+    .post .excerpt { margin: 0; color: #57606a; font-size: .95em; }
+    .empty { color: #6e7781; text-align: center; padding: 40px 0; }
+    footer {
+        margin-top: 2.5em; padding-top: 1.2em; border-top: 1px solid #eaeef2;
+        color: #8b949e; font-size: .85em;
+    }
+    footer a { color: #57606a; }
+    @media (max-width: 560px) {
+        body { padding: 10px; }
+        .container { padding: 20px; }
+        h1 { font-size: 1.55em; }
+    }
+</style>
+</head>
+<body>
+    <div class="container">
+        <a class="back" href="index.html">&larr; 返回首页</a>
+        <h1>第 5 周｜用 Python 编写确定性工具</h1>
+        <div class="meta"><time datetime="2026-11-14">2026-11-14</time><span class="sep">&middot;</span>十二周实战课<span class="sep">&middot;</span><span class="tag">Harness</span><span class="tag">DeepSeek</span><span class="tag">AI入门</span><span class="tag">实战教程</span></div>
+<p><a href="harness-12-weeks.html">课程总览</a> · <a href="harness-week-04.html">上一站</a> · <a href="harness-week-06.html">下一站</a></p>
+<h2 id="本周目标">本周目标</h2>
+<p>不用先学完整 Python 课程，只学习能理解、修改和验证工具所必需的部分。让 DSH 协助开发，你负责理解关键代码与验收。交付一个自己修改过的周报 CLI、一张数据流图与新增测试。</p>
+<p>参考实现 src/report.py 已经可运行。学习时另建 src/report_student.py 实现简单版本，完成后再比较，不能把参考实现算作自己独立开发。</p>
+<h2 id="先认识最小语法">先认识最小语法</h2>
+<p>变量保存值；list 保存多项数据；dict 用键值表示一行；for 遍历；if 判断；def 定义函数；raise 报告失败。文件读取必须指定编码，CSV 应用 csv 模块解析，不要用字符串 split 处理含逗号与引号的单元格。</p>
+<p>以下统计只在数据已校验后成立：</p>
+<pre><code class="language-python">closed = sum(row['status'] == 'closed' for row in rows)
+minutes = sum(int(row['minutes']) for row in rows)</code></pre>
+<p>布尔值在求和中按 1／0 计算。CSV 中读出的数字最初是字符串，要转换并检查范围。不要用 eval 解析文本，更不要把工单 text 拼成 shell 命令。</p>
+<h2 id="每日教程第-2935-天">每日教程：第 29—35 天</h2>
+<table>
+<thead><tr>
+<th>天</th>
+<th>操作</th>
+<th>当天证据</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>29</td>
+<td>用 DSH 只读解释 report.py，画出入口—读取—校验—统计—渲染—写入的路径。</td>
+<td>数据流图与函数作用表</td>
+</tr>
+<tr>
+<td>30</td>
+<td>在 student 文件实现读取 CSV 并打印行数，只用模拟文件。找出表头是否被算入。</td>
+<td>可运行的小程序</td>
+</tr>
+<tr>
+<td>31</td>
+<td>增加状态与 minutes 校验，遇重复 id、非法数值停止；至少手动构造两份无效副本。</td>
+<td>校验代码与失败记录</td>
+</tr>
+<tr>
+<td>32</td>
+<td>实现四项统计，先返回 dict，不急着生成漂亮文案。与人工真值比较。</td>
+<td>四项断言</td>
+</tr>
+<tr>
+<td>33</td>
+<td>增加 Markdown 输出与 --dry-run，dry-run 不写文件。只允许写 output。</td>
+<td>命令与输出文件</td>
+</tr>
+<tr>
+<td>34</td>
+<td>阅读参考实现的路径检查、文件大小限制和原子写入；选择一个改进移植到自己的实现并解释。</td>
+<td>修改理由和局限</td>
+</tr>
+<tr>
+<td>35</td>
+<td>关闭旧会话，自己运行、解释、修复一次错误；整理 README 的运行说明。</td>
+<td>可复现演示与本周复盘</td>
+</tr>
+</tbody>
+</table>
+<h2 id="把开发任务交给-dsh">把开发任务交给 DSH</h2>
+<pre><code class="language-text">请先只读需求与参考实现，说明关键函数和数据流，不改文件。
+随后帮我在 src/report_student.py 实现最小版本，不复制整份答案。
+每次只增加一个能力，解释输入、输出和失败条件。
+不得修改原始 CSV 或测试真值来让结果通过。
+运行测试前告诉我命令；最终提供真实退出码和未完成项。</code></pre>
+<p>你可以要求先写读取函数，然后自己填统计逻辑，再让 DSH 审查。把思考交给模型、自己只按运行，不足以应对面试中的代码追问。</p>
+<h2 id="执行与核验">执行与核验</h2>
+<pre><code class="language-powershell">python -m src.report --dry-run
+python -m src.report
+python -m unittest discover -s tests -v</code></pre>
+<p>参考实现预期生成 output/weekly.md；四项统计与真值一致。自己的 student 版本按你设计的入口运行，不要误以为上述命令测试了尚未接入的 student 文件。必须给自己的函数写直接测试或改好测试导入。</p>
+<p>dry-run 只表示本 CLI 不写报告，不等于任意程序带同名参数就安全；需读实现。原子写入通过同目录临时文件再替换，降低中断留下半文件的风险，但不等于完整事务或并发控制。</p>
+<h2 id="必做的小改动">必做的小改动</h2>
+<p>自己增加 open 工单数，但不改输入数据。先写预期 open=4 的测试，再实现 closed 之外的统计，最后检查报告也显示该值。注意修改 summarize 的返回字段会影响已有完全相等断言：合理更新断言，同时保留原四项检查，不能删掉回归测试。</p>
+<h2 id="工作场景面试与验收">工作场景、面试与验收</h2>
+<p>问：为何让脚本算数、模型写解释？答：把确定性步骤交给可测试程序，把语言判断交给模型，并独立核验关键事实。</p>
+<p>问：输入范围限制为什么还不算沙箱？答：只能约束该程序实现的路径；其他工具或 shell 仍可能越界。</p>
+<p>问：AI 生成代码如何证明可靠？答：解释关键逻辑、检查差异、测试正常与异常输入、确认权限，不以作者是 AI 或回答自信作为依据。</p>
+<p>验收：能解释读取、校验、统计、写入四个阶段；自己的修改有直接测试；失败不会写出看似成功的新报告。遇 ModuleNotFoundError 先检查项目根目录与 -m 用法，不随便 pip install 名称相似的软件包。</p>
+<hr>
+<p><a href="harness-12-weeks.html">课程总览</a> · <a href="harness-week-04.html">上一站</a> · <a href="harness-week-06.html">下一站</a></p>
+
+        <footer>&copy; 2026 &middot; <a href="feed.xml">RSS</a></footer>
+    </div>
+</body>
+</html>

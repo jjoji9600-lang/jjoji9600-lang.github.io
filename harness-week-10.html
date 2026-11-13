@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第 10 周｜建立 Harness 评测与运行观测 - 我的博客</title>
+    <meta name="description" content="第 10 周：建立 Harness 评测与运行观测。含每日任务、操作步骤、提示词、验收与排错。">
+    <link rel="canonical" href="https://jjoji9600-lang.github.io/harness-week-10.html">
+    <meta property="og:url" content="https://jjoji9600-lang.github.io/harness-week-10.html">
+    <link rel="alternate" type="application/rss+xml" href="feed.xml" title="RSS">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="第 10 周｜建立 Harness 评测与运行观测">
+    <meta property="og:description" content="第 10 周：建立 Harness 评测与运行观测。含每日任务、操作步骤、提示词、验收与排错。">
+    <style>
+    * { box-sizing: border-box; }
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
+            "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+        max-width: 820px; margin: 0 auto; padding: 20px;
+        background: #f5f5f5; color: #24292f; line-height: 1.75; font-size: 16px;
+        -webkit-font-smoothing: antialiased;
+    }
+    .container {
+        background: #fff; padding: 34px; border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0,0,0,.08);
+    }
+    h1, h2, h3, h4, h5, h6 { color: #1f2328; line-height: 1.3; }
+    h1 { font-size: 1.9em; margin: 0 0 .4em; }
+    h2 { font-size: 1.45em; margin: 1.8em 0 .7em; padding-bottom: .25em; border-bottom: 1px solid #eaeef2; }
+    h3 { font-size: 1.2em; margin: 1.5em 0 .6em; }
+    h4 { font-size: 1.05em; margin: 1.3em 0 .5em; }
+    p { margin: .9em 0; }
+    a { color: #0969da; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    img { max-width: 100%; height: auto; border-radius: 4px; }
+    ul, ol { padding-left: 1.7em; margin: .9em 0; }
+    li { margin: .3em 0; }
+    li > ul, li > ol { margin: .25em 0; }
+    blockquote {
+        margin: 1.1em 0; padding: .3em 1.1em; border-left: 4px solid #d0d7de;
+        color: #57606a; background: #f6f8fa; border-radius: 0 4px 4px 0;
+    }
+    blockquote p { margin: .4em 0; }
+    hr { border: none; border-top: 1px solid #eaeef2; margin: 2em 0; }
+    pre {
+        background: #1e1e1e; color: #d4d4d4; padding: 16px; border-radius: 6px;
+        overflow-x: auto; line-height: 1.55; font-size: .9em;
+    }
+    pre code { background: none; color: inherit; padding: 0; font-size: inherit; }
+    code { font-family: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace; font-size: .92em; }
+    p code, li code, td code, blockquote code {
+        background: #eff1f3; padding: 2px 6px; border-radius: 4px;
+    }
+    table { border-collapse: collapse; width: 100%; margin: 1.2em 0; font-size: .94em; display: block; overflow-x: auto; }
+    th, td { border: 1px solid #e1e4e8; padding: 7px 12px; text-align: left; }
+    th { background: #f6f8fa; font-weight: 600; }
+    tbody tr:nth-child(even) td { background: #fafbfc; }
+    .back { display: inline-block; margin-bottom: 18px; color: #0969da; font-size: .92em; }
+    .meta { color: #6e7781; font-size: .88em; margin: 0 0 2em; }
+    .meta .sep { margin: 0 8px; color: #d0d7de; }
+    .tag {
+        display: inline-block; padding: 1px 9px; background: #ddf4ff; color: #0969da;
+        border-radius: 12px; font-size: .82em; margin-right: 6px; white-space: nowrap;
+    }
+    .site-header { margin-bottom: 8px; }
+    .site-header h1 { margin-bottom: .2em; }
+    .site-header p { color: #6e7781; margin: 0 0 1.6em; }
+    .post { padding: 20px 0; border-bottom: 1px solid #eaeef2; }
+    .post:first-of-type { padding-top: 4px; }
+    .post:last-of-type { border-bottom: none; padding-bottom: 4px; }
+    .post h2 { margin: 0 0 6px; font-size: 1.28em; border: none; padding: 0; }
+    .post h2 a { color: #1f2328; }
+    .post h2 a:hover { color: #0969da; text-decoration: none; }
+    .post .meta { margin: 0 0 8px; }
+    .post .excerpt { margin: 0; color: #57606a; font-size: .95em; }
+    .empty { color: #6e7781; text-align: center; padding: 40px 0; }
+    footer {
+        margin-top: 2.5em; padding-top: 1.2em; border-top: 1px solid #eaeef2;
+        color: #8b949e; font-size: .85em;
+    }
+    footer a { color: #57606a; }
+    @media (max-width: 560px) {
+        body { padding: 10px; }
+        .container { padding: 20px; }
+        h1 { font-size: 1.55em; }
+    }
+</style>
+</head>
+<body>
+    <div class="container">
+        <a class="back" href="index.html">&larr; 返回首页</a>
+        <h1>第 10 周｜建立 Harness 评测与运行观测</h1>
+        <div class="meta"><time datetime="2026-11-14">2026-11-14</time><span class="sep">&middot;</span>十二周实战课<span class="sep">&middot;</span><span class="tag">Harness</span><span class="tag">DeepSeek</span><span class="tag">AI入门</span><span class="tag">实战教程</span></div>
+<p><a href="harness-12-weeks.html">课程总览</a> · <a href="harness-week-09.html">上一站</a> · <a href="harness-week-11.html">下一站</a></p>
+<h2 id="本周目标">本周目标</h2>
+<p>用固定任务、基线和真实记录判断改进是否有效，而不是凭一次演示或提示词感觉。交付 evals 下的留出集、docs/evaluation.md、脱敏运行摘要与失败分类。</p>
+<p>要分开评测：确定性统计、模型分类、DSH 端到端任务、安全边界。分类正确不代表 Harness 安全，测试全绿也不代表用户任务完成。</p>
+<h2 id="每日教程第-6470-天">每日教程：第 64—70 天</h2>
+<table>
+<thead><tr>
+<th>天</th>
+<th>操作</th>
+<th>当天证据</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>64</td>
+<td>冻结现有代码与提示版本，定义成功条件；记录提交 SHA、模型和运行参数。</td>
+<td>实验配置</td>
+</tr>
+<tr>
+<td>65</td>
+<td>手工另写至少 8 条留出工单，覆盖四类与模糊表达，标注人工真值及理由；不能让被评模型给自己定答案。</td>
+<td>留出集与标注规则</td>
+</tr>
+<tr>
+<td>66</td>
+<td>对比规则／无模型基线和当前模型流程；无预算时只跑离线基线，在线部分标记未执行。</td>
+<td>基线报告</td>
+</tr>
+<tr>
+<td>67</td>
+<td>运行参考 12 条分类评测，记录准确率、结构成功率、Token、耗时；单独评测留出集。</td>
+<td>两组分开报告</td>
+</tr>
+<tr>
+<td>68</td>
+<td>对 DSH 做至少六个任务：正常统计、缺输入、非法 CSV、路径拒绝、注入文本、受控恢复。</td>
+<td>端到端验收矩阵</td>
+</tr>
+<tr>
+<td>69</td>
+<td>只改一个因素，如分类定义或上下文选取；预算允许时同条件重跑并记录差异，不删掉变差结果。</td>
+<td>单变量对比与失败分析</td>
+</tr>
+<tr>
+<td>70</td>
+<td>写结论、局限和下一步；对重复试验次数、小样本和模型变动保持诚实。</td>
+<td>docs/evaluation.md</td>
+</tr>
+</tbody>
+</table>
+<h2 id="运行与记录">运行与记录</h2>
+<pre><code class="language-powershell">python -m unittest discover -s tests -v
+python -m src.report --dry-run
+python -m src.evaluate</code></pre>
+<p>src.evaluate 默认只核对现有 12 条分类结果，不会自动发 API，也不会自动评测你新增的留出集。留出集需另写可参数化评测入口，或手工逐条核对并附表；没有实现就不要宣称脚本已支持。</p>
+<p>建议在 evals 增加 holdout.csv 和 holdout-gold.json，将 evaluate 扩展为受限的 --gold 与 --result 输入。先写测试，再改实现。确保真值不进入模型输入，避免答案泄漏。</p>
+<h2 id="指标定义">指标定义</h2>
+<table>
+<thead><tr>
+<th>指标</th>
+<th>定义</th>
+<th>注意</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>分类准确率</td>
+<td>正确标签数 / 有真值样本数</td>
+<td>只在结构有效时计算；结构失败另报</td>
+</tr>
+<tr>
+<td>结构成功率</td>
+<td>满足 schema 的请求数 / 总请求数</td>
+<td>不能替代语义准确率</td>
+</tr>
+<tr>
+<td>任务完成率</td>
+<td>满足全部验收的任务数 / 总任务数</td>
+<td>不以模型自述完成为准</td>
+</tr>
+<tr>
+<td>人工介入率</td>
+<td>需要额外人工救场的任务占比</td>
+<td>正常强制审批另列，不算失败救场</td>
+</tr>
+<tr>
+<td>成本与延迟</td>
+<td>实际 Token／账单与端到端时间</td>
+<td>记录工具和人工耗时，不只模型耗时</td>
+</tr>
+<tr>
+<td>越权拦截</td>
+<td>非授权动作是否被阻止</td>
+<td>记录实际工具证据，不把拒绝话术当拦截</td>
+</tr>
+</tbody>
+</table>
+<p>样本少时报告计数，例如 10/12，而不只给精确到小数点后的百分比。1 次试验不能推导稳定成功率；p95 需要足够的观测次数，没有就写中位数或逐次结果，不伪装统计充分。</p>
+<h2 id="最小运行记录格式">最小运行记录格式</h2>
+<pre><code class="language-json">{
+  "run_id": "manual-001",
+  "code_sha": "记录真实提交",
+  "model": "记录实际模型ID",
+  "dataset": "fixture-12",
+  "status": "记录真实状态",
+  "schema_valid": true,
+  "correct": null,
+  "total": 12,
+  "latency_ms": null,
+  "usage": null,
+  "human_reviewed": false
+}</code></pre>
+<p>这是记录模板，不是实测数据。未知值保留 null；不要填写示例成绩冒充结果。日志默认不包含原始工单正文、完整提示或凭证，真实系统另按合规要求管理。</p>
+<h2 id="分析失败而非继续堆提示词">分析失败，而非继续堆提示词</h2>
+<p>失败可以来自输入、检索与上下文、模型理解、输出格式、工具权限、运行环境、验收逻辑。先定位层级，再改最小因素。发现真实权限绕过应暂停在线实验、修复边界，再恢复测试。</p>
+<h2 id="面试与验收">面试与验收</h2>
+<p>问：如何证明 Skill 改进有效？答：固定任务、模型、参数与验收，比较有无 Skill 的完成率、成本和介入，注明次数与局限。</p>
+<p>问：12 条全对能上线吗？答：不能，需更多代表性数据、留出集、故障和安全验证，还要根据业务风险设计人审与灰度。</p>
+<p>验收：有独立留出集；基线和改进只用真实记录；分类与端到端评测分开；结论不超出证据。目标不是交一张漂亮高分表，而是能解释系统哪里不可靠。</p>
+<hr>
+<p><a href="harness-12-weeks.html">课程总览</a> · <a href="harness-week-09.html">上一站</a> · <a href="harness-week-11.html">下一站</a></p>
+
+        <footer>&copy; 2026 &middot; <a href="feed.xml">RSS</a></footer>
+    </div>
+</body>
+</html>

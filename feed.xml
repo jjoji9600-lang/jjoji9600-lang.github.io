@@ -5,8 +5,99 @@
     <link>https://jjoji9600-lang.github.io/</link>
     <description>一个技术博客</description>
     <language>zh-CN</language>
-    <lastBuildDate>Sat, 14 Nov 2026 00:00:00 +0800</lastBuildDate>
+    <lastBuildDate>Sat, 14 Nov 2026 00:00:13 +0800</lastBuildDate>
     <atom:link href="https://jjoji9600-lang.github.io/feed.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>从 AI 入门到入职：DeepSeek Harness 十二周实战教程</title>
+      <link>https://jjoji9600-lang.github.io/harness-12-weeks.html</link>
+      <guid isPermaLink="true">https://jjoji9600-lang.github.io/harness-12-weeks.html</guid>
+      <pubDate>Sat, 14 Nov 2026 00:00:13 +0800</pubDate>
+      <description>办公工具只协助学习，以 DeepSeek Harness + DeepSeek API 为核心，含 84 天任务、练习包、安全、评测与面试。</description>
+    </item>
+    <item>
+      <title>第 1 周｜建立学习环境与 Harness 心智模型</title>
+      <link>https://jjoji9600-lang.github.io/harness-week-01.html</link>
+      <guid isPermaLink="true">https://jjoji9600-lang.github.io/harness-week-01.html</guid>
+      <pubDate>Sat, 14 Nov 2026 00:00:12 +0800</pubDate>
+      <description>第 1 周：建立学习环境与 Harness 心智模型。含每日任务、操作步骤、提示词、验收与排错。</description>
+    </item>
+    <item>
+      <title>第 2 周｜跑通 DeepSeek Harness 与 API 配置</title>
+      <link>https://jjoji9600-lang.github.io/harness-week-02.html</link>
+      <guid isPermaLink="true">https://jjoji9600-lang.github.io/harness-week-02.html</guid>
+      <pubDate>Sat, 14 Nov 2026 00:00:11 +0800</pubDate>
+      <description>第 2 周：跑通 DeepSeek Harness 与 API 配置。含每日任务、操作步骤、提示词、验收与排错。</description>
+    </item>
+    <item>
+      <title>第 3 周｜掌握工作区、工具调用和权限</title>
+      <link>https://jjoji9600-lang.github.io/harness-week-03.html</link>
+      <guid isPermaLink="true">https://jjoji9600-lang.github.io/harness-week-03.html</guid>
+      <pubDate>Sat, 14 Nov 2026 00:00:10 +0800</pubDate>
+      <description>第 3 周：掌握工作区、工具调用和权限。含每日任务、操作步骤、提示词、验收与排错。</description>
+    </item>
+    <item>
+      <title>第 4 周｜直接调用 DeepSeek API，定位模型接入故障</title>
+      <link>https://jjoji9600-lang.github.io/harness-week-04.html</link>
+      <guid isPermaLink="true">https://jjoji9600-lang.github.io/harness-week-04.html</guid>
+      <pubDate>Sat, 14 Nov 2026 00:00:09 +0800</pubDate>
+      <description>第 4 周：直接调用 DeepSeek API，定位模型接入故障。含每日任务、操作步骤、提示词、验收与排错。</description>
+    </item>
+    <item>
+      <title>第 5 周｜用 Python 编写确定性工具</title>
+      <link>https://jjoji9600-lang.github.io/harness-week-05.html</link>
+      <guid isPermaLink="true">https://jjoji9600-lang.github.io/harness-week-05.html</guid>
+      <pubDate>Sat, 14 Nov 2026 00:00:08 +0800</pubDate>
+      <description>第 5 周：用 Python 编写确定性工具。含每日任务、操作步骤、提示词、验收与排错。</description>
+    </item>
+    <item>
+      <title>第 6 周｜用 Git、测试与审查约束 Agent</title>
+      <link>https://jjoji9600-lang.github.io/harness-week-06.html</link>
+      <guid isPermaLink="true">https://jjoji9600-lang.github.io/harness-week-06.html</guid>
+      <pubDate>Sat, 14 Nov 2026 00:00:07 +0800</pubDate>
+      <description>第 6 周：用 Git、测试与审查约束 Agent。含每日任务、操作步骤、提示词、验收与排错。</description>
+    </item>
+    <item>
+      <title>第 7 周｜编写 DSH Skill 与管理上下文</title>
+      <link>https://jjoji9600-lang.github.io/harness-week-07.html</link>
+      <guid isPermaLink="true">https://jjoji9600-lang.github.io/harness-week-07.html</guid>
+      <pubDate>Sat, 14 Nov 2026 00:00:06 +0800</pubDate>
+      <description>第 7 周：编写 DSH Skill 与管理上下文。含每日任务、操作步骤、提示词、验收与排错。</description>
+    </item>
+    <item>
+      <title>第 8 周｜理解 Profile、插件与运行边界</title>
+      <link>https://jjoji9600-lang.github.io/harness-week-08.html</link>
+      <guid isPermaLink="true">https://jjoji9600-lang.github.io/harness-week-08.html</guid>
+      <pubDate>Sat, 14 Nov 2026 00:00:05 +0800</pubDate>
+      <description>第 8 周：理解 Profile、插件与运行边界。含每日任务、操作步骤、提示词、验收与排错。</description>
+    </item>
+    <item>
+      <title>第 9 周｜构建可校验的模型任务流程</title>
+      <link>https://jjoji9600-lang.github.io/harness-week-09.html</link>
+      <guid isPermaLink="true">https://jjoji9600-lang.github.io/harness-week-09.html</guid>
+      <pubDate>Sat, 14 Nov 2026 00:00:04 +0800</pubDate>
+      <description>第 9 周：构建可校验的模型任务流程。含每日任务、操作步骤、提示词、验收与排错。</description>
+    </item>
+    <item>
+      <title>第 10 周｜建立 Harness 评测与运行观测</title>
+      <link>https://jjoji9600-lang.github.io/harness-week-10.html</link>
+      <guid isPermaLink="true">https://jjoji9600-lang.github.io/harness-week-10.html</guid>
+      <pubDate>Sat, 14 Nov 2026 00:00:03 +0800</pubDate>
+      <description>第 10 周：建立 Harness 评测与运行观测。含每日任务、操作步骤、提示词、验收与排错。</description>
+    </item>
+    <item>
+      <title>第 11 周｜自动化执行、故障恢复与作品发布</title>
+      <link>https://jjoji9600-lang.github.io/harness-week-11.html</link>
+      <guid isPermaLink="true">https://jjoji9600-lang.github.io/harness-week-11.html</guid>
+      <pubDate>Sat, 14 Nov 2026 00:00:02 +0800</pubDate>
+      <description>第 11 周：自动化执行、故障恢复与作品发布。含每日任务、操作步骤、提示词、验收与排错。</description>
+    </item>
+    <item>
+      <title>第 12 周｜完成工程作品、面试与求职</title>
+      <link>https://jjoji9600-lang.github.io/harness-week-12.html</link>
+      <guid isPermaLink="true">https://jjoji9600-lang.github.io/harness-week-12.html</guid>
+      <pubDate>Sat, 14 Nov 2026 00:00:01 +0800</pubDate>
+      <description>第 12 周：完成工程作品、面试与求职。含每日任务、操作步骤、提示词、验收与排错。</description>
+    </item>
     <item>
       <title>让编码 Agent 少写旧式 JavaScript：Modern Web Guidance 的检索式知识补丁</title>
       <link>https://jjoji9600-lang.github.io/2026-11-14-modern-web-guidance-agents.html</link>
