@@ -88,6 +88,36 @@
             <p>一个技术博客</p>
         </div>
         <article class="post">
+            <h2><a href="2026-11-14-modern-web-guidance-agents.html">让编码 Agent 少写旧式 JavaScript：Modern Web Guidance 的检索式知识补丁</a></h2>
+            <div class="meta"><time datetime="2026-11-14">2026-11-14</time><span class="sep">&middot;</span>技术解读<span class="sep">&middot;</span><span class="tag">JavaScript</span><span class="tag">Web平台</span><span class="tag">AI编程</span><span class="tag">兼容性</span></div>
+            <p class="excerpt">同一个网页需求，编码 Agent 可能熟练地写出旧式变通方案，却忽略浏览器已经提供的能力。Modern Web Guidance 试图补上这段知识落差：不是重新训练模型，而是在实现前，把与当前任务有关的平台指南送进上下文。</p>
+        </article>
+        <article class="post">
+            <h2><a href="2026-11-14-smolmaxxing-low-memory-inference.html">让旧设备跑大模型：smolmaxxing 的内存预算与专家分页实践</a></h2>
+            <div class="meta"><time datetime="2026-11-14">2026-11-14</time><span class="sep">&middot;</span>技术解读<span class="sep">&middot;</span><span class="tag">LLM</span><span class="tag">端侧推理</span><span class="tag">内存优化</span><span class="tag">MoE</span></div>
+            <p class="excerpt">模型比设备内存大，还能运行吗？smolmaxxing 的思路不是让所有权重凭空消失，而是重新安排哪些数据必须留在 RAM、哪些可以在需要时再从闪存读取。它展示了端侧推理的另一种目标：先让旧设备可用，再讨论速度。</p>
+        </article>
+        <article class="post">
+            <h2><a href="2026-11-14-cpython-yk-meta-tracing.html">给 CPython 接上元追踪 JIT：yk 的优化实验与性能边界</a></h2>
+            <div class="meta"><time datetime="2026-11-14">2026-11-14</time><span class="sep">&middot;</span>技术解读<span class="sep">&middot;</span><span class="tag">Python</span><span class="tag">CPython</span><span class="tag">JIT</span><span class="tag">性能工程</span></div>
+            <p class="excerpt">为现成解释器加速，是否一定要重新造一套虚拟机？Laurence Tratt 的 ykcpython 实验展示了另一条路线：保留 CPython，在解释器执行用户程序时记录热点路径，再把路径优化成机器码。重点不是宣布 Python 又快了多少…</p>
+        </article>
+        <article class="post">
+            <h2><a href="2026-11-14-dbdelve-memory-and-query-workflow.html">数据库客户端为什么吃内存：从 DBDelve 的百万行实验看结果集与安全默认值</a></h2>
+            <div class="meta"><time datetime="2026-11-14">2026-11-14</time><span class="sep">&middot;</span>技术解读<span class="sep">&middot;</span><span class="tag">数据库</span><span class="tag">Rust</span><span class="tag">GPUI</span><span class="tag">性能分析</span></div>
+            <p class="excerpt">查询结束了，客户端却越来越卡：瓶颈未必在数据库执行器，也可能在结果集如何被保存和绘制。DBDelve 是用 Rust 与 GPUI 构建的原生跨平台数据库客户端，不依赖 Electron 或 JVM。作者在 Show HN 中展示了大结果集…</p>
+        </article>
+        <article class="post">
+            <h2><a href="2026-11-14-rust-relax-live-jit.html">Rust 不必每次从构建等起：Relax 如何缩短编辑—运行循环</a></h2>
+            <div class="meta"><time datetime="2026-11-14">2026-11-14</time><span class="sep">&middot;</span>技术解读<span class="sep">&middot;</span><span class="tag">Rust</span><span class="tag">Relax</span><span class="tag">JIT</span><span class="tag">开发工具</span></div>
+            <p class="excerpt">Rust 开发有两种快：成品运行得快，以及改完代码后尽快得到反馈。Makepad 的 Relax 把目标放在后者：不必等整个程序完成传统构建，先运行，再按需编译，并把部分修改补进活着的进程。它是实验工具，不是正式发布工具链的替代品。</p>
+        </article>
+        <article class="post">
+            <h2><a href="2026-11-14-psalm7-taint-capabilities.html">Psalm 7 的安全默认值：把污点分析、类型检查与副作用契约连起来</a></h2>
+            <div class="meta"><time datetime="2026-11-14">2026-11-14</time><span class="sep">&middot;</span>技术解读<span class="sep">&middot;</span><span class="tag">PHP</span><span class="tag">Psalm</span><span class="tag">静态分析</span><span class="tag">安全</span></div>
+            <p class="excerpt">给 PHP 项目升级分析器，可能比升级普通依赖更影响日常流程。Daniil Gentili 发布的 Psalm 7 把安全分析设为默认，并与类型检查、死代码检测合并运行。新增报告未必意味着代码刚刚变危险，也可能是工具现在看到了过去遗漏的数据…</p>
+        </article>
+        <article class="post">
             <h2><a href="%E7%94%A8%E6%89%8B%E6%9C%BA%E6%8E%A7%E5%88%B6%E6%9C%8D%E5%8A%A1%E5%99%A8-DSH-Go-%E4%B8%8E-dsh-tui.html">用手机控制服务器 DSH Go 与 dsh-tui</a></h2>
             <div class="meta"><time datetime="2026-11-13">2026-11-13</time><span class="sep">&middot;</span>技术<span class="sep">&middot;</span><span class="tag">dsh-go</span><span class="tag">dsh-tui</span><span class="tag">运维</span><span class="tag">安卓</span><span class="tag">远程</span></div>
             <p class="excerpt">凌晨一点，手机弹出告警：磁盘 92%。笔记本在另一个房间，孩子刚睡着。你需要的不是一台电脑，而是一个能立刻动手的入口。</p>

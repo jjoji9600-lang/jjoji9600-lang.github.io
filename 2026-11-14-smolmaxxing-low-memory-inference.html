@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>让旧设备跑大模型：smolmaxxing 的内存预算与专家分页实践 - 我的博客</title>
+    <meta name="description" content="模型比设备内存大，还能运行吗？smolmaxxing 的思路不是让所有权重凭空消失，而是重新安排哪些数据必须留在 RAM、哪些可以在需要时再从闪存读取。它展示了端侧推理的另一种目标：先让旧设备可用，再讨论速度。">
+    <link rel="canonical" href="https://jjoji9600-lang.github.io/2026-11-14-smolmaxxing-low-memory-inference.html">
+    <meta property="og:url" content="https://jjoji9600-lang.github.io/2026-11-14-smolmaxxing-low-memory-inference.html">
+    <link rel="alternate" type="application/rss+xml" href="feed.xml" title="RSS">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="让旧设备跑大模型：smolmaxxing 的内存预算与专家分页实践">
+    <meta property="og:description" content="模型比设备内存大，还能运行吗？smolmaxxing 的思路不是让所有权重凭空消失，而是重新安排哪些数据必须留在 RAM、哪些可以在需要时再从闪存读取。它展示了端侧推理的另一种目标：先让旧设备可用，再讨论速度。">
+    <style>
+    * { box-sizing: border-box; }
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
+            "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+        max-width: 820px; margin: 0 auto; padding: 20px;
+        background: #f5f5f5; color: #24292f; line-height: 1.75; font-size: 16px;
+        -webkit-font-smoothing: antialiased;
+    }
+    .container {
+        background: #fff; padding: 34px; border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0,0,0,.08);
+    }
+    h1, h2, h3, h4, h5, h6 { color: #1f2328; line-height: 1.3; }
+    h1 { font-size: 1.9em; margin: 0 0 .4em; }
+    h2 { font-size: 1.45em; margin: 1.8em 0 .7em; padding-bottom: .25em; border-bottom: 1px solid #eaeef2; }
+    h3 { font-size: 1.2em; margin: 1.5em 0 .6em; }
+    h4 { font-size: 1.05em; margin: 1.3em 0 .5em; }
+    p { margin: .9em 0; }
+    a { color: #0969da; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    img { max-width: 100%; height: auto; border-radius: 4px; }
+    ul, ol { padding-left: 1.7em; margin: .9em 0; }
+    li { margin: .3em 0; }
+    li > ul, li > ol { margin: .25em 0; }
+    blockquote {
+        margin: 1.1em 0; padding: .3em 1.1em; border-left: 4px solid #d0d7de;
+        color: #57606a; background: #f6f8fa; border-radius: 0 4px 4px 0;
+    }
+    blockquote p { margin: .4em 0; }
+    hr { border: none; border-top: 1px solid #eaeef2; margin: 2em 0; }
+    pre {
+        background: #1e1e1e; color: #d4d4d4; padding: 16px; border-radius: 6px;
+        overflow-x: auto; line-height: 1.55; font-size: .9em;
+    }
+    pre code { background: none; color: inherit; padding: 0; font-size: inherit; }
+    code { font-family: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace; font-size: .92em; }
+    p code, li code, td code, blockquote code {
+        background: #eff1f3; padding: 2px 6px; border-radius: 4px;
+    }
+    table { border-collapse: collapse; width: 100%; margin: 1.2em 0; font-size: .94em; display: block; overflow-x: auto; }
+    th, td { border: 1px solid #e1e4e8; padding: 7px 12px; text-align: left; }
+    th { background: #f6f8fa; font-weight: 600; }
+    tbody tr:nth-child(even) td { background: #fafbfc; }
+    .back { display: inline-block; margin-bottom: 18px; color: #0969da; font-size: .92em; }
+    .meta { color: #6e7781; font-size: .88em; margin: 0 0 2em; }
+    .meta .sep { margin: 0 8px; color: #d0d7de; }
+    .tag {
+        display: inline-block; padding: 1px 9px; background: #ddf4ff; color: #0969da;
+        border-radius: 12px; font-size: .82em; margin-right: 6px; white-space: nowrap;
+    }
+    .site-header { margin-bottom: 8px; }
+    .site-header h1 { margin-bottom: .2em; }
+    .site-header p { color: #6e7781; margin: 0 0 1.6em; }
+    .post { padding: 20px 0; border-bottom: 1px solid #eaeef2; }
+    .post:first-of-type { padding-top: 4px; }
+    .post:last-of-type { border-bottom: none; padding-bottom: 4px; }
+    .post h2 { margin: 0 0 6px; font-size: 1.28em; border: none; padding: 0; }
+    .post h2 a { color: #1f2328; }
+    .post h2 a:hover { color: #0969da; text-decoration: none; }
+    .post .meta { margin: 0 0 8px; }
+    .post .excerpt { margin: 0; color: #57606a; font-size: .95em; }
+    .empty { color: #6e7781; text-align: center; padding: 40px 0; }
+    footer {
+        margin-top: 2.5em; padding-top: 1.2em; border-top: 1px solid #eaeef2;
+        color: #8b949e; font-size: .85em;
+    }
+    footer a { color: #57606a; }
+    @media (max-width: 560px) {
+        body { padding: 10px; }
+        .container { padding: 20px; }
+        h1 { font-size: 1.55em; }
+    }
+</style>
+</head>
+<body>
+    <div class="container">
+        <a class="back" href="index.html">&larr; 返回首页</a>
+        <h1>让旧设备跑大模型：smolmaxxing 的内存预算与专家分页实践</h1>
+        <div class="meta"><time datetime="2026-11-14">2026-11-14</time><span class="sep">&middot;</span>技术解读<span class="sep">&middot;</span><span class="tag">LLM</span><span class="tag">端侧推理</span><span class="tag">内存优化</span><span class="tag">MoE</span></div>
+<p>模型比设备内存大，还能运行吗？smolmaxxing 的思路不是让所有权重凭空消失，而是重新安排哪些数据必须留在 RAM、哪些可以在需要时再从闪存读取。它展示了端侧推理的另一种目标：先让旧设备可用，再讨论速度。</p>
+<p><strong>本文是原创中文摘要与编者解读，不是全文译文。</strong> 项目事实来自 README 查阅快照；工程取舍为编者分析，性能未经本地复测。</p>
+<h2 id="参数总量不等于常驻内存">参数总量，不等于常驻内存</h2>
+<p>项目基于 llama.cpp 补丁，为电视盒、2013 年 iPad Air 和 Android 手机分别做内核与内存适配。核心技术之一是利用 MoE 的稀疏激活：每次生成 token 只访问部分专家，常用专家保留在 RAM，其余按需从闪存读取，并预取下一层所需数据。</p>
+<p>因此，总参数量、每个 token 的激活参数量、进程实际常驻内存，是三个不同指标。项目报告在 1GB 级设备运行 8B/16B MoE，以及在约有 3GB 空闲 RAM 的手机上运行 35B/80B MoE。这是作者在特定设备与模型条件下的结果，不意味着任意同内存设备都能复现，更不是把全部权重装进 RAM。</p>
+<h2 id="不只是一种压缩">不只是一种压缩</h2>
+<p>README 还涉及裁剪很少使用的词表输出行、针对芯片实现低比特内核，以及对稠密模型做闪存流式读取。这些优化作用于不同层面：词表裁剪改变输出部分的规模，量化与内核影响数据表示及计算，分页和流式读取改变数据驻留位置。不能把它们合并成一个通用加速开关。</p>
+<p>编者分析，RAM 节约可能转化为存储访问成本。专家访问是否集中、预取是否命中、闪存速度如何，都会影响体验。能完成生成，与适合持续交互并非同一件事。设备、模型、量化和上下文条件不同，直接比较每秒 token 数也容易失真。</p>
+<h2 id="先检查平台再检查质量">先检查平台，再检查质量</h2>
+<p>这不是所有旧设备的一键安装方案。项目的 iPad 路径需要越狱；电视盒和 iPad 的裁剪模型不能由未打补丁的 llama.cpp 直接载入。编者不建议为试跑模型而忽略设备安全与平台维护成本。</p>
+<p>对有闲置设备、愿意做底层适配的实验者，它提供了研究内存层次的材料。若要用于可靠服务，编者建议单独测量冷启动、连续生成、长上下文时的内存峰值，以及裁剪和量化后的任务质量；还应留意可用存储、持续功耗和系统留给其他进程的空间。这是评估清单，不是作者已证明全面解决的问题。</p>
+<h2 id="开源代码不统一模型许可">开源代码不统一模型许可</h2>
+<p>README 声明项目代码为 MIT，llama.cpp 补丁延续其许可；模型权重保留各自许可，评估使用的 Wikipedia 片段为 CC BY-SA 4.0。下载、修改与再分发时应分别检查，不能用项目 MIT 概括全部资产。</p>
+<p>这项工作的价值在于展示可行的内存调度路线，而不是证明旧设备等价于高端 GPU。先定义能接受的速度、质量与维护代价，才能判断运行起来是否真的解决了自己的问题。</p>
+<h2 id="来源与日期">来源与日期</h2>
+<ul>
+<li>原始项目标题：<a href="https://github.com/hyperionaidev/smolmaxxing/" target="_blank" rel="noopener">smolmaxxing</a>；作者：hyperionaidev / 项目贡献者。README 未明示首发日；本文依据 2026-11-13 查阅快照，不代表 HN 发帖当时版本。</li>
+<li><a href="https://news.ycombinator.com/item?id=50468888" target="_blank" rel="noopener">HN 讨论</a>：I'm making LLMs work on small and old devices；提交者 mrashad74，2026-11-12 15:23（UTC）。提交日期不是 README 首发日，本文未以评论区观点作事实依据。</li>
+<li>本文不复制代码、模型权重或评估语料，也不作全文翻译；资产许可以原仓库与模型发布页为准。</li>
+</ul>
+
+        <footer>&copy; 2026 &middot; <a href="feed.xml">RSS</a></footer>
+    </div>
+</body>
+</html>

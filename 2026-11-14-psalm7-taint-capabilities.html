@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Psalm 7 的安全默认值：把污点分析、类型检查与副作用契约连起来 - 我的博客</title>
+    <meta name="description" content="给 PHP 项目升级分析器，可能比升级普通依赖更影响日常流程。Daniil Gentili 发布的 Psalm 7 把安全分析设为默认，并与类型检查、死代码检测合并运行。新增报告未必意味着代码刚刚变危险，也可能是工具现在看到了过去遗漏的数据…">
+    <link rel="canonical" href="https://jjoji9600-lang.github.io/2026-11-14-psalm7-taint-capabilities.html">
+    <meta property="og:url" content="https://jjoji9600-lang.github.io/2026-11-14-psalm7-taint-capabilities.html">
+    <link rel="alternate" type="application/rss+xml" href="feed.xml" title="RSS">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Psalm 7 的安全默认值：把污点分析、类型检查与副作用契约连起来">
+    <meta property="og:description" content="给 PHP 项目升级分析器，可能比升级普通依赖更影响日常流程。Daniil Gentili 发布的 Psalm 7 把安全分析设为默认，并与类型检查、死代码检测合并运行。新增报告未必意味着代码刚刚变危险，也可能是工具现在看到了过去遗漏的数据…">
+    <style>
+    * { box-sizing: border-box; }
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
+            "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+        max-width: 820px; margin: 0 auto; padding: 20px;
+        background: #f5f5f5; color: #24292f; line-height: 1.75; font-size: 16px;
+        -webkit-font-smoothing: antialiased;
+    }
+    .container {
+        background: #fff; padding: 34px; border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0,0,0,.08);
+    }
+    h1, h2, h3, h4, h5, h6 { color: #1f2328; line-height: 1.3; }
+    h1 { font-size: 1.9em; margin: 0 0 .4em; }
+    h2 { font-size: 1.45em; margin: 1.8em 0 .7em; padding-bottom: .25em; border-bottom: 1px solid #eaeef2; }
+    h3 { font-size: 1.2em; margin: 1.5em 0 .6em; }
+    h4 { font-size: 1.05em; margin: 1.3em 0 .5em; }
+    p { margin: .9em 0; }
+    a { color: #0969da; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    img { max-width: 100%; height: auto; border-radius: 4px; }
+    ul, ol { padding-left: 1.7em; margin: .9em 0; }
+    li { margin: .3em 0; }
+    li > ul, li > ol { margin: .25em 0; }
+    blockquote {
+        margin: 1.1em 0; padding: .3em 1.1em; border-left: 4px solid #d0d7de;
+        color: #57606a; background: #f6f8fa; border-radius: 0 4px 4px 0;
+    }
+    blockquote p { margin: .4em 0; }
+    hr { border: none; border-top: 1px solid #eaeef2; margin: 2em 0; }
+    pre {
+        background: #1e1e1e; color: #d4d4d4; padding: 16px; border-radius: 6px;
+        overflow-x: auto; line-height: 1.55; font-size: .9em;
+    }
+    pre code { background: none; color: inherit; padding: 0; font-size: inherit; }
+    code { font-family: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace; font-size: .92em; }
+    p code, li code, td code, blockquote code {
+        background: #eff1f3; padding: 2px 6px; border-radius: 4px;
+    }
+    table { border-collapse: collapse; width: 100%; margin: 1.2em 0; font-size: .94em; display: block; overflow-x: auto; }
+    th, td { border: 1px solid #e1e4e8; padding: 7px 12px; text-align: left; }
+    th { background: #f6f8fa; font-weight: 600; }
+    tbody tr:nth-child(even) td { background: #fafbfc; }
+    .back { display: inline-block; margin-bottom: 18px; color: #0969da; font-size: .92em; }
+    .meta { color: #6e7781; font-size: .88em; margin: 0 0 2em; }
+    .meta .sep { margin: 0 8px; color: #d0d7de; }
+    .tag {
+        display: inline-block; padding: 1px 9px; background: #ddf4ff; color: #0969da;
+        border-radius: 12px; font-size: .82em; margin-right: 6px; white-space: nowrap;
+    }
+    .site-header { margin-bottom: 8px; }
+    .site-header h1 { margin-bottom: .2em; }
+    .site-header p { color: #6e7781; margin: 0 0 1.6em; }
+    .post { padding: 20px 0; border-bottom: 1px solid #eaeef2; }
+    .post:first-of-type { padding-top: 4px; }
+    .post:last-of-type { border-bottom: none; padding-bottom: 4px; }
+    .post h2 { margin: 0 0 6px; font-size: 1.28em; border: none; padding: 0; }
+    .post h2 a { color: #1f2328; }
+    .post h2 a:hover { color: #0969da; text-decoration: none; }
+    .post .meta { margin: 0 0 8px; }
+    .post .excerpt { margin: 0; color: #57606a; font-size: .95em; }
+    .empty { color: #6e7781; text-align: center; padding: 40px 0; }
+    footer {
+        margin-top: 2.5em; padding-top: 1.2em; border-top: 1px solid #eaeef2;
+        color: #8b949e; font-size: .85em;
+    }
+    footer a { color: #57606a; }
+    @media (max-width: 560px) {
+        body { padding: 10px; }
+        .container { padding: 20px; }
+        h1 { font-size: 1.55em; }
+    }
+</style>
+</head>
+<body>
+    <div class="container">
+        <a class="back" href="index.html">&larr; 返回首页</a>
+        <h1>Psalm 7 的安全默认值：把污点分析、类型检查与副作用契约连起来</h1>
+        <div class="meta"><time datetime="2026-11-14">2026-11-14</time><span class="sep">&middot;</span>技术解读<span class="sep">&middot;</span><span class="tag">PHP</span><span class="tag">Psalm</span><span class="tag">静态分析</span><span class="tag">安全</span></div>
+<blockquote>
+<p>中文摘要／原创解读，非全文译文。功能说明依据发布文章；未在本地运行 Psalm 或复测性能，不引用 HN 评论观点。</p>
+</blockquote>
+<p>给 PHP 项目升级分析器，可能比升级普通依赖更影响日常流程。Daniil Gentili 发布的 Psalm 7 把安全分析设为默认，并与类型检查、死代码检测合并运行。新增报告未必意味着代码刚刚变危险，也可能是工具现在看到了过去遗漏的数据路径。</p>
+<h2 id="类型正确不代表数据可信">类型正确，不代表数据可信</h2>
+<p>发布文章说明，污点改用位掩码表示，通过紧凑的函数摘要解析传播关系。这一实现调整支撑了默认开启安全检查；文中宣称安全分析最高可快十倍，但这是发布者给出的上限，不是所有项目的普遍实测结果。</p>
+<p>污点分析关心输入来自哪里、流经哪些函数、最终进入什么敏感操作。Psalm 7 扩展到 NoSQL、LLM prompt 与 URL 相关分类，识别 <code>php://input</code> 等来源，也补强闭包、生成器、引用参数等传播路径。</p>
+<p>用一个编者自拟的概念场景说明：接口接收用户提供的检索文本，把它交给回调拼装，再发给下游服务。即便每一步都是合法字符串，信任边界仍可能被跨越。分析器需要追踪流动关系，而不只是判断参数类型。但出现 <code>TaintedLlmPrompt</code> 告警不等于已经证明一次攻击有效，没有告警也不等于证明所有提示注入都被防住；还要审查模型调用方式和应用权限。</p>
+<h2 id="副作用成为可讨论的契约">副作用成为可讨论的契约</h2>
+<p>另一项变化是 capabilities：函数可以描述自己是否读取或修改属性、读写全局状态、执行 I/O、读取时间等，而不只给出笼统的纯与不纯标签。读取时钟与输出日志都是效果，不应因为函数返回一个普通值就被忽略。</p>
+<p>purity templates 则把回调效果传到调用方。仍用概念例子：一个遍历函数若只执行纯计算回调，效果与执行写日志回调不同；高阶函数的契约应该随之变化。发布文章还指出，纯函数及只读函数会进行污点特化，从而减少部分安全分析误报。这是在类型、效果与数据流之间建立联系，不是给代码贴上一个绝对安全的标签。</p>
+<p>死代码检测也转向引用图和入口可达性。两个从未由入口触及的类即便互相调用，也不能靠循环引用证明自己被使用。对动态调用较多的应用，编者建议先核对入口和工具建模，再决定删除，不宜只凭一条报告行动。</p>
+<h2 id="编者建议分阶段验收升级">编者建议：分阶段验收升级</h2>
+<p>运行环境先确认是 64 位 PHP 8.2—8.6，再检查插件依赖：插件 API 已独立于 Psalm 主版本管理，不能仅凭主版本号推断兼容性。随后在独立分支运行，区分新增安全报告、历史抑制项和真实缺陷，优先核对外部输入到敏感操作的路径。</p>
+<p>若暂时无法一次处理全部变化，发布文档提供关闭 runTaintAnalysis 的退出选项；这应是明确记录的过渡决定，而不是把新告警一关了之。纯度注解建议是主动启用的功能，升级不会自动改写全部代码。涉及自动修改时，应审查差异并重跑测试。静态分析扩大了可见范围，但仍应与运行时测试、权限控制和人工安全审查共同使用。</p>
+<h2 id="来源与日期">来源与日期</h2>
+<ul>
+<li>原文：<a href="https://psalm.dev/articles/psalm-7" target="_blank" rel="noopener">Announcing Psalm 7</a>，作者 Daniil Gentili。</li>
+<li>原文发布日期：2026-11-02。</li>
+<li><a href="https://news.ycombinator.com/item?id=50406107" target="_blank" rel="noopener">Hacker News 讨论</a>：提交于 2026-11-07 17:06（UTC），并非原文发布日期。</li>
+<li>本文整理日期：2026-11-14（北京时间）。发布文章未见明确转载／翻译许可；本文为独立摘要和评论，概念例子由编者自拟，不复制原文代码，原作权利归原作者。</li>
+</ul>
+
+        <footer>&copy; 2026 &middot; <a href="feed.xml">RSS</a></footer>
+    </div>
+</body>
+</html>

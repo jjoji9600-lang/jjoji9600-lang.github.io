@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rust 不必每次从构建等起：Relax 如何缩短编辑—运行循环 - 我的博客</title>
+    <meta name="description" content="Rust 开发有两种快：成品运行得快，以及改完代码后尽快得到反馈。Makepad 的 Relax 把目标放在后者：不必等整个程序完成传统构建，先运行，再按需编译，并把部分修改补进活着的进程。它是实验工具，不是正式发布工具链的替代品。">
+    <link rel="canonical" href="https://jjoji9600-lang.github.io/2026-11-14-rust-relax-live-jit.html">
+    <meta property="og:url" content="https://jjoji9600-lang.github.io/2026-11-14-rust-relax-live-jit.html">
+    <link rel="alternate" type="application/rss+xml" href="feed.xml" title="RSS">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Rust 不必每次从构建等起：Relax 如何缩短编辑—运行循环">
+    <meta property="og:description" content="Rust 开发有两种快：成品运行得快，以及改完代码后尽快得到反馈。Makepad 的 Relax 把目标放在后者：不必等整个程序完成传统构建，先运行，再按需编译，并把部分修改补进活着的进程。它是实验工具，不是正式发布工具链的替代品。">
+    <style>
+    * { box-sizing: border-box; }
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
+            "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+        max-width: 820px; margin: 0 auto; padding: 20px;
+        background: #f5f5f5; color: #24292f; line-height: 1.75; font-size: 16px;
+        -webkit-font-smoothing: antialiased;
+    }
+    .container {
+        background: #fff; padding: 34px; border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0,0,0,.08);
+    }
+    h1, h2, h3, h4, h5, h6 { color: #1f2328; line-height: 1.3; }
+    h1 { font-size: 1.9em; margin: 0 0 .4em; }
+    h2 { font-size: 1.45em; margin: 1.8em 0 .7em; padding-bottom: .25em; border-bottom: 1px solid #eaeef2; }
+    h3 { font-size: 1.2em; margin: 1.5em 0 .6em; }
+    h4 { font-size: 1.05em; margin: 1.3em 0 .5em; }
+    p { margin: .9em 0; }
+    a { color: #0969da; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    img { max-width: 100%; height: auto; border-radius: 4px; }
+    ul, ol { padding-left: 1.7em; margin: .9em 0; }
+    li { margin: .3em 0; }
+    li > ul, li > ol { margin: .25em 0; }
+    blockquote {
+        margin: 1.1em 0; padding: .3em 1.1em; border-left: 4px solid #d0d7de;
+        color: #57606a; background: #f6f8fa; border-radius: 0 4px 4px 0;
+    }
+    blockquote p { margin: .4em 0; }
+    hr { border: none; border-top: 1px solid #eaeef2; margin: 2em 0; }
+    pre {
+        background: #1e1e1e; color: #d4d4d4; padding: 16px; border-radius: 6px;
+        overflow-x: auto; line-height: 1.55; font-size: .9em;
+    }
+    pre code { background: none; color: inherit; padding: 0; font-size: inherit; }
+    code { font-family: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace; font-size: .92em; }
+    p code, li code, td code, blockquote code {
+        background: #eff1f3; padding: 2px 6px; border-radius: 4px;
+    }
+    table { border-collapse: collapse; width: 100%; margin: 1.2em 0; font-size: .94em; display: block; overflow-x: auto; }
+    th, td { border: 1px solid #e1e4e8; padding: 7px 12px; text-align: left; }
+    th { background: #f6f8fa; font-weight: 600; }
+    tbody tr:nth-child(even) td { background: #fafbfc; }
+    .back { display: inline-block; margin-bottom: 18px; color: #0969da; font-size: .92em; }
+    .meta { color: #6e7781; font-size: .88em; margin: 0 0 2em; }
+    .meta .sep { margin: 0 8px; color: #d0d7de; }
+    .tag {
+        display: inline-block; padding: 1px 9px; background: #ddf4ff; color: #0969da;
+        border-radius: 12px; font-size: .82em; margin-right: 6px; white-space: nowrap;
+    }
+    .site-header { margin-bottom: 8px; }
+    .site-header h1 { margin-bottom: .2em; }
+    .site-header p { color: #6e7781; margin: 0 0 1.6em; }
+    .post { padding: 20px 0; border-bottom: 1px solid #eaeef2; }
+    .post:first-of-type { padding-top: 4px; }
+    .post:last-of-type { border-bottom: none; padding-bottom: 4px; }
+    .post h2 { margin: 0 0 6px; font-size: 1.28em; border: none; padding: 0; }
+    .post h2 a { color: #1f2328; }
+    .post h2 a:hover { color: #0969da; text-decoration: none; }
+    .post .meta { margin: 0 0 8px; }
+    .post .excerpt { margin: 0; color: #57606a; font-size: .95em; }
+    .empty { color: #6e7781; text-align: center; padding: 40px 0; }
+    footer {
+        margin-top: 2.5em; padding-top: 1.2em; border-top: 1px solid #eaeef2;
+        color: #8b949e; font-size: .85em;
+    }
+    footer a { color: #57606a; }
+    @media (max-width: 560px) {
+        body { padding: 10px; }
+        .container { padding: 20px; }
+        h1 { font-size: 1.55em; }
+    }
+</style>
+</head>
+<body>
+    <div class="container">
+        <a class="back" href="index.html">&larr; 返回首页</a>
+        <h1>Rust 不必每次从构建等起：Relax 如何缩短编辑—运行循环</h1>
+        <div class="meta"><time datetime="2026-11-14">2026-11-14</time><span class="sep">&middot;</span>技术解读<span class="sep">&middot;</span><span class="tag">Rust</span><span class="tag">Relax</span><span class="tag">JIT</span><span class="tag">开发工具</span></div>
+<blockquote>
+<p>中文摘要／原创解读，非全文译文。能力和测量结果来自官方页面，未经本站独立复测；不引用 HN 评论观点。</p>
+</blockquote>
+<p>Rust 开发有两种快：成品运行得快，以及改完代码后尽快得到反馈。Makepad 的 Relax 把目标放在后者：不必等整个程序完成传统构建，先运行，再按需编译，并把部分修改补进活着的进程。它是实验工具，不是正式发布工具链的替代品。</p>
+<h2 id="编译单位从整包转向函数">编译单位从整包转向函数</h2>
+<p>按项目说明，Relax 不是 rustc 或 LLVM 的包装器，而是用 Rust 实现从源码到机器码的流水线，接管解析、类型处理、优化、代码生成和加载等工作。它支持 x86-64 与 AArch64；函数首次被调用时按需编译，热点函数再在后台提升优化等级。</p>
+<p>这改变了等待发生的位置：冷代码不用立即付出完整优化成本，常用代码逐步得到更好的机器码。代价也很直接：编译工作进入运行阶段，第一次经过某条路径仍可能等待，最终代码质量也不必然追平 LLVM。</p>
+<p>热补丁是另一个重要区别。函数体改动可以重检、重编译并替换，让进程状态保留；结构体布局、导入、trait 或 impl 头、宏等变化仍需重启。不能把支持热更新理解为任何 Rust 修改都能无缝生效。</p>
+<h2 id="保留状态不是免费午餐">保留状态，不是免费午餐</h2>
+<p>项目的设计规则是：已经发布、仍可能处在调用栈上的机器码，不会被释放或原地重写。这样旧调用能继续执行，新调用再进入新版本，但编译器、缓存与历次代码版本都占用进程内存。频繁修改、长期运行的会话，需要同时观察响应时间和内存增长。</p>
+<p>检查时机也要留意。默认运行模式在函数执行前做类型检查，借用检查则在后台进行；<code>--check-first</code> 可以选择先等借用检查完成。对需要严格检查门槛的流程，不能直接把默认运行方式当作传统完整构建的等价替代。页面也承认 <code>relax check</code> 目前还没有比 <code>cargo check</code> 更快。</p>
+<h2 id="更快出结果不代表成品更快">更快出结果，不代表成品更快</h2>
+<p>官方给出的 21 项工作负载中，稳态耗时几何平均值相对普通 release 构建为 x64 的 1.12 倍、arm64 的 1.24 倍；相对 native-CPU 构建则为 1.22 倍和 1.25 倍。这里数值越大越慢，不能写成提速倍数。Relax 针对当前 CPU 编译，因此 native 对照尤其值得看。</p>
+<p>这些数据测于 2026-11-12，x64 使用 Linux 桌面机，arm64 使用 M4 Mac，单项取三轮中位数。项目展示的大型游戏约 11 秒出现首帧，也只是特定项目在 M4 上的作者测量，不能推广成所有 Rust 项目的承诺。</p>
+<h2 id="编者判断选择可撤回的试验场">编者判断：选择可撤回的试验场</h2>
+<p>需要反复调界面的应用、可长驻测试进程，是值得尝试的场景；复杂原生依赖或频繁改变数据布局的项目，收益可能不同。建议先选独立开发分支，分别记录冷启动、缓存命中、保存到反馈的延迟和内存，再与原流程比较。项目主要在 Makepad 中测试，其他项目覆盖有限，Windows 尚未测试。正式发布仍使用 <code>cargo build --release</code>，把开发效率实验与交付正确性分开。</p>
+<h2 id="来源与日期">来源与日期</h2>
+<ul>
+<li>原文：<a href="https://makepad.github.io/relax/" target="_blank" rel="noopener">Relax: Rust without the wait</a>，作者 Makepad／Relax 项目团队，页面未署个人作者。</li>
+<li>原文首发日期：页面未提供；其中基准标注 2026-11-12，不能据此推定页面首发日。</li>
+<li><a href="https://news.ycombinator.com/item?id=50458849" target="_blank" rel="noopener">Hacker News 讨论</a>：提交于 2026-11-11 21:20（UTC）。</li>
+<li>本文整理日期：2026-11-14（北京时间）。页面 License 节声明 MIT，标准库源文件另有声明；本文为独立中文摘要和评论，未复制项目代码或作全文翻译。</li>
+</ul>
+
+        <footer>&copy; 2026 &middot; <a href="feed.xml">RSS</a></footer>
+    </div>
+</body>
+</html>

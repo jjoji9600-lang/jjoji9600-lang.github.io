@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数据库客户端为什么吃内存：从 DBDelve 的百万行实验看结果集与安全默认值 - 我的博客</title>
+    <meta name="description" content="查询结束了，客户端却越来越卡：瓶颈未必在数据库执行器，也可能在结果集如何被保存和绘制。DBDelve 是用 Rust 与 GPUI 构建的原生跨平台数据库客户端，不依赖 Electron 或 JVM。作者在 Show HN 中展示了大结果集…">
+    <link rel="canonical" href="https://jjoji9600-lang.github.io/2026-11-14-dbdelve-memory-and-query-workflow.html">
+    <meta property="og:url" content="https://jjoji9600-lang.github.io/2026-11-14-dbdelve-memory-and-query-workflow.html">
+    <link rel="alternate" type="application/rss+xml" href="feed.xml" title="RSS">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="数据库客户端为什么吃内存：从 DBDelve 的百万行实验看结果集与安全默认值">
+    <meta property="og:description" content="查询结束了，客户端却越来越卡：瓶颈未必在数据库执行器，也可能在结果集如何被保存和绘制。DBDelve 是用 Rust 与 GPUI 构建的原生跨平台数据库客户端，不依赖 Electron 或 JVM。作者在 Show HN 中展示了大结果集…">
+    <style>
+    * { box-sizing: border-box; }
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
+            "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+        max-width: 820px; margin: 0 auto; padding: 20px;
+        background: #f5f5f5; color: #24292f; line-height: 1.75; font-size: 16px;
+        -webkit-font-smoothing: antialiased;
+    }
+    .container {
+        background: #fff; padding: 34px; border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0,0,0,.08);
+    }
+    h1, h2, h3, h4, h5, h6 { color: #1f2328; line-height: 1.3; }
+    h1 { font-size: 1.9em; margin: 0 0 .4em; }
+    h2 { font-size: 1.45em; margin: 1.8em 0 .7em; padding-bottom: .25em; border-bottom: 1px solid #eaeef2; }
+    h3 { font-size: 1.2em; margin: 1.5em 0 .6em; }
+    h4 { font-size: 1.05em; margin: 1.3em 0 .5em; }
+    p { margin: .9em 0; }
+    a { color: #0969da; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    img { max-width: 100%; height: auto; border-radius: 4px; }
+    ul, ol { padding-left: 1.7em; margin: .9em 0; }
+    li { margin: .3em 0; }
+    li > ul, li > ol { margin: .25em 0; }
+    blockquote {
+        margin: 1.1em 0; padding: .3em 1.1em; border-left: 4px solid #d0d7de;
+        color: #57606a; background: #f6f8fa; border-radius: 0 4px 4px 0;
+    }
+    blockquote p { margin: .4em 0; }
+    hr { border: none; border-top: 1px solid #eaeef2; margin: 2em 0; }
+    pre {
+        background: #1e1e1e; color: #d4d4d4; padding: 16px; border-radius: 6px;
+        overflow-x: auto; line-height: 1.55; font-size: .9em;
+    }
+    pre code { background: none; color: inherit; padding: 0; font-size: inherit; }
+    code { font-family: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace; font-size: .92em; }
+    p code, li code, td code, blockquote code {
+        background: #eff1f3; padding: 2px 6px; border-radius: 4px;
+    }
+    table { border-collapse: collapse; width: 100%; margin: 1.2em 0; font-size: .94em; display: block; overflow-x: auto; }
+    th, td { border: 1px solid #e1e4e8; padding: 7px 12px; text-align: left; }
+    th { background: #f6f8fa; font-weight: 600; }
+    tbody tr:nth-child(even) td { background: #fafbfc; }
+    .back { display: inline-block; margin-bottom: 18px; color: #0969da; font-size: .92em; }
+    .meta { color: #6e7781; font-size: .88em; margin: 0 0 2em; }
+    .meta .sep { margin: 0 8px; color: #d0d7de; }
+    .tag {
+        display: inline-block; padding: 1px 9px; background: #ddf4ff; color: #0969da;
+        border-radius: 12px; font-size: .82em; margin-right: 6px; white-space: nowrap;
+    }
+    .site-header { margin-bottom: 8px; }
+    .site-header h1 { margin-bottom: .2em; }
+    .site-header p { color: #6e7781; margin: 0 0 1.6em; }
+    .post { padding: 20px 0; border-bottom: 1px solid #eaeef2; }
+    .post:first-of-type { padding-top: 4px; }
+    .post:last-of-type { border-bottom: none; padding-bottom: 4px; }
+    .post h2 { margin: 0 0 6px; font-size: 1.28em; border: none; padding: 0; }
+    .post h2 a { color: #1f2328; }
+    .post h2 a:hover { color: #0969da; text-decoration: none; }
+    .post .meta { margin: 0 0 8px; }
+    .post .excerpt { margin: 0; color: #57606a; font-size: .95em; }
+    .empty { color: #6e7781; text-align: center; padding: 40px 0; }
+    footer {
+        margin-top: 2.5em; padding-top: 1.2em; border-top: 1px solid #eaeef2;
+        color: #8b949e; font-size: .85em;
+    }
+    footer a { color: #57606a; }
+    @media (max-width: 560px) {
+        body { padding: 10px; }
+        .container { padding: 20px; }
+        h1 { font-size: 1.55em; }
+    }
+</style>
+</head>
+<body>
+    <div class="container">
+        <a class="back" href="index.html">&larr; 返回首页</a>
+        <h1>数据库客户端为什么吃内存：从 DBDelve 的百万行实验看结果集与安全默认值</h1>
+        <div class="meta"><time datetime="2026-11-14">2026-11-14</time><span class="sep">&middot;</span>技术解读<span class="sep">&middot;</span><span class="tag">数据库</span><span class="tag">Rust</span><span class="tag">GPUI</span><span class="tag">性能分析</span></div>
+<p>查询结束了，客户端却越来越卡：瓶颈未必在数据库执行器，也可能在结果集如何被保存和绘制。DBDelve 是用 Rust 与 GPUI 构建的原生跨平台数据库客户端，不依赖 Electron 或 JVM。作者在 Show HN 中展示了大结果集实验，但更值得读的是数字背后的前提。</p>
+<p><strong>本文是原创中文摘要与编者解读，不是全文译文。</strong> 功能依据 README，实验补充来自作者自己的 HN 介绍帖，不代表其他评论者或独立评测结论。</p>
+<h2 id="百万行是刻意施加的压力">百万行，是刻意施加的压力</h2>
+<p>作者比较 DBDelve 0.3.6 与 DBeaver 25.3.1，硬件为 M1 Pro、32GB 内存；基准日期为 2026-10-11，每项取五次运行的中位数。全部载入一百万行时，作者报告内存占用分别为 4.9GB 与 17GB。</p>
+<p>这个结果必须连同限制一起看：表有一百列、约 4GB，关闭了行数上限，而且为实验手工提高了 DBeaver 的堆限制。作者明确说这不是常规用法。它能提示大结果集的表示开销，却不能证明所有查询都会出现相同比例的差距，更不是本文的独立横评。</p>
+<h2 id="数据布局与绘制是两个问题">数据布局与绘制，是两个问题</h2>
+<p>作者称主要优化是使用 packed rows，降低行表示的内存开销；这不应被简化为换成 Rust 就自然省内存。编者理解，值之外的对象、指针及管理信息也可能占空间，行数与列数扩大后，这类成本会累积。</p>
+<p>同样，滚动流畅不等于只保存屏幕上那几行。界面虚拟化解决的是绘制多少内容；结果集是否全部驻留，解决的是保留多少数据。数据库在服务端执行 SQL、客户端接收和组织结果、界面呈现结果，又是不同阶段。只看查询总耗时，不能直接定位是哪一层变快了。</p>
+<p>日常排查中，编者更推荐先限制结果行数与必要列，再按需求分页或导出，避免把压力实验当作推荐工作流。选择客户端时，还要用自己的数据库类型、数据形态和操作路径验证，而非只看百万行演示。</p>
+<h2 id="安全工作流比主题更重要">安全工作流比主题更重要</h2>
+<p>README 描述了按连接设置只读、读写或完全访问模式，以及破坏操作前确认；编辑单元格时，会先生成 UPDATE 供用户检查。编者建议给生产与测试连接设置明显不同的颜色，并在数据库服务端使用最小权限账户。客户端模式是辅助防线，不能替代服务端授权或备份。</p>
+<p>日志也需要留意：项目的诊断日志可能包含主机名、数据库名和驱动输出。提交问题前应人工脱敏，不能因为日志保存在本地就直接公开。</p>
+<h2 id="仍需验证成熟度">仍需验证成熟度</h2>
+<p>作者说明尚未与成熟客户端实现功能对等；查阅时安装说明仍有未公证等限制。本文不提供绕过系统保护的步骤，试用前应核实当前发行版来源与签名状态。对重度依赖特定数据库管理功能的团队，先拿非生产环境测试，比立即迁移更稳妥。</p>
+<h2 id="来源与日期">来源与日期</h2>
+<ul>
+<li>原始项目标题：<a href="https://github.com/ShayanAbbas1/dbdelve" target="_blank" rel="noopener">DBDelve</a>；作者：Shayan Abbas and contributors。README 未明示首发日，本文依据 2026-11-13 查阅快照。</li>
+<li>作者原始介绍及 <a href="https://news.ycombinator.com/item?id=50427934" target="_blank" rel="noopener">HN 讨论</a>：Show HN: DBDelve – Open-Source DB Client Made with Rust and GPUI；提交于 2026-11-09 16:36（UTC）。该日期不是 README 首发日。</li>
+<li>README 当前声明 GPL-3.0，切换前代码的原 MIT 声明仍适用，字体与主题另有许可。本文仅作摘要分析，不复制实现、截图或整篇说明。</li>
+</ul>
+
+        <footer>&copy; 2026 &middot; <a href="feed.xml">RSS</a></footer>
+    </div>
+</body>
+</html>
