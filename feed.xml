@@ -5,8 +5,15 @@
     <link>https://jjoji9600-lang.github.io/</link>
     <description>一个技术博客</description>
     <language>zh-CN</language>
-    <lastBuildDate>Sat, 14 Nov 2026 00:01:30 +0800</lastBuildDate>
+    <lastBuildDate>Sat, 14 Nov 2026 18:51:46 +0800</lastBuildDate>
     <atom:link href="https://jjoji9600-lang.github.io/feed.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>手机通过 DSH Go 控制服务器：随身运维入门</title>
+      <link>https://jjoji9600-lang.github.io/%E6%89%8B%E6%9C%BA%E9%80%9A%E8%BF%87-dsh-go-%E6%8E%A7%E5%88%B6%E6%9C%8D%E5%8A%A1%E5%99%A8.html</link>
+      <guid isPermaLink="true">https://jjoji9600-lang.github.io/%E6%89%8B%E6%9C%BA%E9%80%9A%E8%BF%87-dsh-go-%E6%8E%A7%E5%88%B6%E6%9C%8D%E5%8A%A1%E5%99%A8.html</guid>
+      <pubDate>Sat, 14 Nov 2026 18:51:46 +0800</pubDate>
+      <description>电脑不在身边，服务器却突然告警。除了手机 SSH，还可以用 DSH Go 连接服务器上的 DSH，通过对话检查状态、分析日志，并审批工具执行。</description>
+    </item>
     <item>
       <title>完全零基础也能跟：DeepSeek Harness 十二周小白教程</title>
       <link>https://jjoji9600-lang.github.io/harness-beginner.html</link>
@@ -209,13 +216,6 @@
       <guid isPermaLink="true">https://jjoji9600-lang.github.io/2026-11-14-smolmaxxing-low-memory-inference.html</guid>
       <pubDate>Sat, 14 Nov 2026 00:00:00 +0800</pubDate>
       <description>模型比设备内存大，还能运行吗？smolmaxxing 的思路不是让所有权重凭空消失，而是重新安排哪些数据必须留在 RAM、哪些可以在需要时再从闪存读取。它展示了端侧推理的另一种目标：先让旧设备可用，再讨论速度。</description>
-    </item>
-    <item>
-      <title>给 CPython 接上元追踪 JIT：yk 的优化实验与性能边界</title>
-      <link>https://jjoji9600-lang.github.io/2026-11-14-cpython-yk-meta-tracing.html</link>
-      <guid isPermaLink="true">https://jjoji9600-lang.github.io/2026-11-14-cpython-yk-meta-tracing.html</guid>
-      <pubDate>Sat, 14 Nov 2026 00:00:00 +0800</pubDate>
-      <description>为现成解释器加速，是否一定要重新造一套虚拟机？Laurence Tratt 的 ykcpython 实验展示了另一条路线：保留 CPython，在解释器执行用户程序时记录热点路径，再把路径优化成机器码。重点不是宣布 Python 又快了多少…</description>
     </item>
   </channel>
 </rss>
